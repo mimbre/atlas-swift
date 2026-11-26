@@ -1522,13 +1522,15 @@ public struct ActionModel: Codable, Sendable, Equatable {
     public var to: String?
     public var submitTo: CallModel?
     public var page: Bool?
+    public var icon: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil, icon: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.page = page
+        self.icon = icon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1538,6 +1540,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         to = try? c.decodeIfPresent(String.self, forKey: .to)
         submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
         page = try? c.decodeIfPresent(Bool.self, forKey: .page)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1546,6 +1549,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         case to
         case submitTo = "submit_to"
         case page
+        case icon
     }
 }
 
@@ -1686,13 +1690,15 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
     public var to: String?
     public var submitTo: CallModel?
     public var note: Bool?
+    public var weight: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.note = note
+        self.weight = weight
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1702,6 +1708,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         to = try? c.decodeIfPresent(String.self, forKey: .to)
         submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
         note = try? c.decodeIfPresent(Bool.self, forKey: .note)
+        weight = try? c.decodeIfPresent(String.self, forKey: .weight)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1710,6 +1717,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         case to
         case submitTo = "submit_to"
         case note
+        case weight
     }
 }
 
