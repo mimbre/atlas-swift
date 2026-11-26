@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.33.0")
+        XCTAssertEqual(Contract.version, "0.34.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -158,6 +158,25 @@ final class ContractTests: XCTestCase {
         try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"answers"}"##), ##"{"id":"b1","props":{},"type":"answers"}"##)
     }
 
+    func test_block_actions_decodes_and_round_trips() throws {
+        for text in [##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","to":"to 1"}]},"type":"actions"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}]},"type":"actions"}"##] {
+            let block = try decode(Block.self, text)
+            guard case .actions = block.content else { return XCTFail("actions fell back: \(block.content)") }
+            XCTAssertEqual(block.type, "actions")
+            XCTAssertEqual(block.id, "b1")
+            try assertRoundTrip(block, text)
+        }
+    }
+
+    func test_block_actions_without_actions_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"actions"}"##, ##"{"id":"b1","props":{"actions":"zz"},"type":"actions"}"##] {
+            let block = try decode(Block.self, text)
+            guard case .actions(let props) = block.content else { return XCTFail("actions fell back: \(block.content)") }
+            XCTAssertNil(props.actions)
+        }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"actions"}"##), ##"{"id":"b1","props":{},"type":"actions"}"##)
+    }
+
     func test_block_option_decodes_and_round_trips() throws {
         for text in [##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"n":7,"text":"text 1"},"type":"option"}"##, ##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","note":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"},"badge":"badge 1","fields":[{"label":"label 1","origin":{"by":"by 1","cause":"cause 1","since":"since 1"},"value":"value 1"}],"n":7,"text":"text 1","tone":"tone 1"},"type":"option"}"##] {
             let block = try decode(Block.self, text)
@@ -285,9 +304,9 @@ final class ContractTests: XCTestCase {
     }
 
     func test_a_list_of_blocks_keeps_every_known_block_around_a_fallback() throws {
-        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"title":"title 1"},"type":"header"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"text":"text 1"},"type":"text"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"lines":[{"kind":"kind 1"}],"n":7},"type":"instruction"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"answers":[{"key":"key 1","label":"label 1","to":"to 1"}]},"type":"answers"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"n":7,"text":"text 1"},"type":"option"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
+        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"title":"title 1"},"type":"header"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"text":"text 1"},"type":"text"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"lines":[{"kind":"kind 1"}],"n":7},"type":"instruction"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"answers":[{"key":"key 1","label":"label 1","to":"to 1"}]},"type":"answers"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","to":"to 1"}]},"type":"actions"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"n":7,"text":"text 1"},"type":"option"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
         let blocks = try decode([Block].self, text)
-        XCTAssertEqual(blocks.count, 26)
+        XCTAssertEqual(blocks.count, 28)
         for (i, block) in blocks.enumerated() {
             if case .fallback(let fallback) = block.content {
                 XCTAssertEqual(i % 2, 1)

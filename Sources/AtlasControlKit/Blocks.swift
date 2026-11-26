@@ -175,6 +175,24 @@ public struct AnswersBlock: Codable, Sendable, Equatable {
     }
 }
 
+/// The props of the block `actions`.
+public struct ActionsBlock: Codable, Sendable, Equatable {
+    public var actions: [ActionModel]?
+
+    public init(actions: [ActionModel]? = nil) {
+        self.actions = actions
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        actions = try? c.decodeIfPresent([ActionModel].self, forKey: .actions)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case actions
+    }
+}
+
 /// The props of the block `option`.
 public struct OptionBlock: Codable, Sendable, Equatable {
     public var n: Int?
@@ -442,6 +460,7 @@ public struct Block: Codable, Sendable, Equatable {
         case text(TextBlock)
         case instruction(InstructionBlock)
         case answers(AnswersBlock)
+        case actions(ActionsBlock)
         case option(OptionBlock)
         case panel(PanelBlock)
         case form(FormBlock)
@@ -466,6 +485,7 @@ public struct Block: Codable, Sendable, Equatable {
         case .text: "text"
         case .instruction: "instruction"
         case .answers: "answers"
+        case .actions: "actions"
         case .option: "option"
         case .panel: "panel"
         case .form: "form"
@@ -493,6 +513,7 @@ public struct Block: Codable, Sendable, Equatable {
             case "text": content = .text(try props.decode(TextBlock.self))
             case "instruction": content = .instruction(try props.decode(InstructionBlock.self))
             case "answers": content = .answers(try props.decode(AnswersBlock.self))
+            case "actions": content = .actions(try props.decode(ActionsBlock.self))
             case "option": content = .option(try props.decode(OptionBlock.self))
             case "panel": content = .panel(try props.decode(PanelBlock.self))
             case "form": content = .form(try props.decode(FormBlock.self))
@@ -519,6 +540,7 @@ public struct Block: Codable, Sendable, Equatable {
         case .text(let props): try BlockWire(id: id, type: "text", props: props).encode(to: encoder)
         case .instruction(let props): try BlockWire(id: id, type: "instruction", props: props).encode(to: encoder)
         case .answers(let props): try BlockWire(id: id, type: "answers", props: props).encode(to: encoder)
+        case .actions(let props): try BlockWire(id: id, type: "actions", props: props).encode(to: encoder)
         case .option(let props): try BlockWire(id: id, type: "option", props: props).encode(to: encoder)
         case .panel(let props): try BlockWire(id: id, type: "panel", props: props).encode(to: encoder)
         case .form(let props): try BlockWire(id: id, type: "form", props: props).encode(to: encoder)
