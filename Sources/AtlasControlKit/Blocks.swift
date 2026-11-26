@@ -4,15 +4,23 @@ import Foundation
 /// The props of the block `list`.
 public struct ListBlock: Codable, Sendable, Equatable {
     public var title: String?
-    public var rows: [RowModel]
+    public var rows: [RowModel]?
     public var empty: String?
     public var actions: [ActionModel]?
 
-    public init(title: String? = nil, rows: [RowModel], empty: String? = nil, actions: [ActionModel]? = nil) {
+    public init(title: String? = nil, rows: [RowModel]? = nil, empty: String? = nil, actions: [ActionModel]? = nil) {
         self.title = title
         self.rows = rows
         self.empty = empty
         self.actions = actions
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        rows = try? c.decodeIfPresent([RowModel].self, forKey: .rows)
+        empty = try? c.decodeIfPresent(String.self, forKey: .empty)
+        actions = try? c.decodeIfPresent([ActionModel].self, forKey: .actions)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -25,10 +33,15 @@ public struct ListBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `groups`.
 public struct GroupsBlock: Codable, Sendable, Equatable {
-    public var groups: [GroupModel]
+    public var groups: [GroupModel]?
 
-    public init(groups: [GroupModel]) {
+    public init(groups: [GroupModel]? = nil) {
         self.groups = groups
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        groups = try? c.decodeIfPresent([GroupModel].self, forKey: .groups)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -38,16 +51,24 @@ public struct GroupsBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `item`.
 public struct ItemBlock: Codable, Sendable, Equatable {
-    public var title: String
-    public var fields: [PairModel]
+    public var title: String?
+    public var fields: [PairModel]?
     public var actions: [ActionModel]?
     public var links: [LinkModel]?
 
-    public init(title: String, fields: [PairModel], actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
+    public init(title: String? = nil, fields: [PairModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
         self.title = title
         self.fields = fields
         self.actions = actions
         self.links = links
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        fields = try? c.decodeIfPresent([PairModel].self, forKey: .fields)
+        actions = try? c.decodeIfPresent([ActionModel].self, forKey: .actions)
+        links = try? c.decodeIfPresent([LinkModel].self, forKey: .links)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -60,14 +81,21 @@ public struct ItemBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `header`.
 public struct HeaderBlock: Codable, Sendable, Equatable {
-    public var title: String
+    public var title: String?
     public var eyebrow: String?
     public var key: String?
 
-    public init(title: String, eyebrow: String? = nil, key: String? = nil) {
+    public init(title: String? = nil, eyebrow: String? = nil, key: String? = nil) {
         self.title = title
         self.eyebrow = eyebrow
         self.key = key
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        eyebrow = try? c.decodeIfPresent(String.self, forKey: .eyebrow)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -79,16 +107,24 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `text`.
 public struct TextBlock: Codable, Sendable, Equatable {
-    public var text: String
+    public var text: String?
     public var label: String?
     public var since: String?
     public var role: String?
 
-    public init(text: String, label: String? = nil, since: String? = nil, role: String? = nil) {
+    public init(text: String? = nil, label: String? = nil, since: String? = nil, role: String? = nil) {
         self.text = text
         self.label = label
         self.since = since
         self.role = role
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        since = try? c.decodeIfPresent(String.self, forKey: .since)
+        role = try? c.decodeIfPresent(String.self, forKey: .role)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -101,12 +137,18 @@ public struct TextBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `instruction`.
 public struct InstructionBlock: Codable, Sendable, Equatable {
-    public var n: Int
-    public var lines: [InstructionLineModel]
+    public var n: Int?
+    public var lines: [InstructionLineModel]?
 
-    public init(n: Int, lines: [InstructionLineModel]) {
+    public init(n: Int? = nil, lines: [InstructionLineModel]? = nil) {
         self.n = n
         self.lines = lines
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        n = try? c.decodeIfPresent(Int.self, forKey: .n)
+        lines = try? c.decodeIfPresent([InstructionLineModel].self, forKey: .lines)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -117,10 +159,15 @@ public struct InstructionBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `answers`.
 public struct AnswersBlock: Codable, Sendable, Equatable {
-    public var answers: [PanelAnswerModel]
+    public var answers: [PanelAnswerModel]?
 
-    public init(answers: [PanelAnswerModel]) {
+    public init(answers: [PanelAnswerModel]? = nil) {
         self.answers = answers
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        answers = try? c.decodeIfPresent([PanelAnswerModel].self, forKey: .answers)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -130,20 +177,30 @@ public struct AnswersBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `option`.
 public struct OptionBlock: Codable, Sendable, Equatable {
-    public var n: Int
-    public var text: String
+    public var n: Int?
+    public var text: String?
     public var badge: String?
     public var tone: String?
-    public var fields: [PairModel]
-    public var answer: PanelAnswerModel
+    public var fields: [PairModel]?
+    public var answer: PanelAnswerModel?
 
-    public init(n: Int, text: String, badge: String? = nil, tone: String? = nil, fields: [PairModel], answer: PanelAnswerModel) {
+    public init(n: Int? = nil, text: String? = nil, badge: String? = nil, tone: String? = nil, fields: [PairModel]? = nil, answer: PanelAnswerModel? = nil) {
         self.n = n
         self.text = text
         self.badge = badge
         self.tone = tone
         self.fields = fields
         self.answer = answer
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        n = try? c.decodeIfPresent(Int.self, forKey: .n)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        badge = try? c.decodeIfPresent(String.self, forKey: .badge)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
+        fields = try? c.decodeIfPresent([PairModel].self, forKey: .fields)
+        answer = try? c.decodeIfPresent(PanelAnswerModel.self, forKey: .answer)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -158,8 +215,8 @@ public struct OptionBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `panel`.
 public struct PanelBlock: Codable, Sendable, Equatable {
-    public var heading: String
-    public var title: String
+    public var heading: String?
+    public var title: String?
     public var key: String?
     public var aside: String?
     public var byline: [ClauseModel]?
@@ -170,7 +227,7 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     public var actions: [ActionModel]?
     public var links: [LinkModel]?
 
-    public init(heading: String, title: String, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
+    public init(heading: String? = nil, title: String? = nil, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
         self.heading = heading
         self.title = title
         self.key = key
@@ -182,6 +239,21 @@ public struct PanelBlock: Codable, Sendable, Equatable {
         self.answers = answers
         self.actions = actions
         self.links = links
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        heading = try? c.decodeIfPresent(String.self, forKey: .heading)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        aside = try? c.decodeIfPresent(String.self, forKey: .aside)
+        byline = try? c.decodeIfPresent([ClauseModel].self, forKey: .byline)
+        items = try? c.decodeIfPresent([PanelItemModel].self, forKey: .items)
+        checks = try? c.decodeIfPresent([CheckModel].self, forKey: .checks)
+        box = try? c.decodeIfPresent(BoxModel.self, forKey: .box)
+        answers = try? c.decodeIfPresent([PanelAnswerModel].self, forKey: .answers)
+        actions = try? c.decodeIfPresent([ActionModel].self, forKey: .actions)
+        links = try? c.decodeIfPresent([LinkModel].self, forKey: .links)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -201,20 +273,30 @@ public struct PanelBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `form`.
 public struct FormBlock: Codable, Sendable, Equatable {
-    public var title: String
-    public var inputs: [InputModel]
-    public var submitLabel: String
-    public var submitTo: CallModel
+    public var title: String?
+    public var inputs: [InputModel]?
+    public var submitLabel: String?
+    public var submitTo: CallModel?
     public var cancelTo: String?
     public var errors: [String]?
 
-    public init(title: String, inputs: [InputModel], submitLabel: String, submitTo: CallModel, cancelTo: String? = nil, errors: [String]? = nil) {
+    public init(title: String? = nil, inputs: [InputModel]? = nil, submitLabel: String? = nil, submitTo: CallModel? = nil, cancelTo: String? = nil, errors: [String]? = nil) {
         self.title = title
         self.inputs = inputs
         self.submitLabel = submitLabel
         self.submitTo = submitTo
         self.cancelTo = cancelTo
         self.errors = errors
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        inputs = try? c.decodeIfPresent([InputModel].self, forKey: .inputs)
+        submitLabel = try? c.decodeIfPresent(String.self, forKey: .submitLabel)
+        submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
+        cancelTo = try? c.decodeIfPresent(String.self, forKey: .cancelTo)
+        errors = try? c.decodeIfPresent([String].self, forKey: .errors)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -229,20 +311,30 @@ public struct FormBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `confirm`.
 public struct ConfirmBlock: Codable, Sendable, Equatable {
-    public var title: String
-    public var text: String
+    public var title: String?
+    public var text: String?
     public var confirmLabel: String?
     public var confirmTo: CallModel?
-    public var cancelTo: String
+    public var cancelTo: String?
     public var code: String?
 
-    public init(title: String, text: String, confirmLabel: String? = nil, confirmTo: CallModel? = nil, cancelTo: String, code: String? = nil) {
+    public init(title: String? = nil, text: String? = nil, confirmLabel: String? = nil, confirmTo: CallModel? = nil, cancelTo: String? = nil, code: String? = nil) {
         self.title = title
         self.text = text
         self.confirmLabel = confirmLabel
         self.confirmTo = confirmTo
         self.cancelTo = cancelTo
         self.code = code
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        confirmLabel = try? c.decodeIfPresent(String.self, forKey: .confirmLabel)
+        confirmTo = try? c.decodeIfPresent(CallModel.self, forKey: .confirmTo)
+        cancelTo = try? c.decodeIfPresent(String.self, forKey: .cancelTo)
+        code = try? c.decodeIfPresent(String.self, forKey: .code)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -257,15 +349,15 @@ public struct ConfirmBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `plan`.
 public struct PlanBlock: Codable, Sendable, Equatable {
-    public var title: String
-    public var request: String
-    public var state: String
+    public var title: String?
+    public var request: String?
+    public var state: String?
     public var summary: String?
     public var by: String?
     public var before: String?
-    public var steps: [StepModel]
+    public var steps: [StepModel]?
 
-    public init(title: String, request: String, state: String, summary: String? = nil, by: String? = nil, before: String? = nil, steps: [StepModel]) {
+    public init(title: String? = nil, request: String? = nil, state: String? = nil, summary: String? = nil, by: String? = nil, before: String? = nil, steps: [StepModel]? = nil) {
         self.title = title
         self.request = request
         self.state = state
@@ -273,6 +365,17 @@ public struct PlanBlock: Codable, Sendable, Equatable {
         self.by = by
         self.before = before
         self.steps = steps
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        request = try? c.decodeIfPresent(String.self, forKey: .request)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        summary = try? c.decodeIfPresent(String.self, forKey: .summary)
+        by = try? c.decodeIfPresent(String.self, forKey: .by)
+        before = try? c.decodeIfPresent(String.self, forKey: .before)
+        steps = try? c.decodeIfPresent([StepModel].self, forKey: .steps)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -288,20 +391,30 @@ public struct PlanBlock: Codable, Sendable, Equatable {
 
 /// The props of the block `console_action`.
 public struct ConsoleActionBlock: Codable, Sendable, Equatable {
-    public var label: String
-    public var keys: [String]
-    public var operation: ConsoleOperationModel
-    public var scope: ConsoleScopeModel
-    public var available: Bool
+    public var label: String?
+    public var keys: [String]?
+    public var operation: ConsoleOperationModel?
+    public var scope: ConsoleScopeModel?
+    public var available: Bool?
     public var reason: String?
 
-    public init(label: String, keys: [String], operation: ConsoleOperationModel, scope: ConsoleScopeModel, available: Bool, reason: String? = nil) {
+    public init(label: String? = nil, keys: [String]? = nil, operation: ConsoleOperationModel? = nil, scope: ConsoleScopeModel? = nil, available: Bool? = nil, reason: String? = nil) {
         self.label = label
         self.keys = keys
         self.operation = operation
         self.scope = scope
         self.available = available
         self.reason = reason
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        keys = try? c.decodeIfPresent([String].self, forKey: .keys)
+        operation = try? c.decodeIfPresent(ConsoleOperationModel.self, forKey: .operation)
+        scope = try? c.decodeIfPresent(ConsoleScopeModel.self, forKey: .scope)
+        available = try? c.decodeIfPresent(Bool.self, forKey: .available)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
     }
 
     enum CodingKeys: String, CodingKey {

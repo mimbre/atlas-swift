@@ -3,12 +3,18 @@ import Foundation
 
 /// The props of the markup kind `legend`.
 public struct LegendMarkup: Codable, Sendable, Equatable {
-    public var title: String
-    public var context: String
+    public var title: String?
+    public var context: String?
 
-    public init(title: String, context: String) {
+    public init(title: String? = nil, context: String? = nil) {
         self.title = title
         self.context = context
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        context = try? c.decodeIfPresent(String.self, forKey: .context)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -19,12 +25,18 @@ public struct LegendMarkup: Codable, Sendable, Equatable {
 
 /// The props of the markup kind `part`.
 public struct PartMarkup: Codable, Sendable, Equatable {
-    public var title: String
-    public var role: String
+    public var title: String?
+    public var role: String?
 
-    public init(title: String, role: String) {
+    public init(title: String? = nil, role: String? = nil) {
         self.title = title
         self.role = role
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        role = try? c.decodeIfPresent(String.self, forKey: .role)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -35,12 +47,18 @@ public struct PartMarkup: Codable, Sendable, Equatable {
 
 /// The props of the markup kind `section`.
 public struct SectionMarkup: Codable, Sendable, Equatable {
-    public var title: String
+    public var title: String?
     public var collapsible: Bool?
 
-    public init(title: String, collapsible: Bool? = nil) {
+    public init(title: String? = nil, collapsible: Bool? = nil) {
         self.title = title
         self.collapsible = collapsible
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        collapsible = try? c.decodeIfPresent(Bool.self, forKey: .collapsible)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -51,10 +69,15 @@ public struct SectionMarkup: Codable, Sendable, Equatable {
 
 /// The props of the markup kind `highlight`.
 public struct HighlightMarkup: Codable, Sendable, Equatable {
-    public var tone: String
+    public var tone: String?
 
-    public init(tone: String) {
+    public init(tone: String? = nil) {
         self.tone = tone
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
     }
 
     enum CodingKeys: String, CodingKey {

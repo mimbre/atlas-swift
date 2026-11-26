@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.32.0")
+        XCTAssertEqual(Contract.version, "0.33.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -35,15 +35,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_list_without_rows_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{},"type":"list"}"##, Fallback.Reason.missing(path: ["rows"])),
-            (##"{"id":"b1","props":{"rows":"zz"},"type":"list"}"##, Fallback.Reason.wrongType(path: ["rows"])),
-        ] {
+    func test_block_list_without_rows_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"list"}"##, ##"{"id":"b1","props":{"rows":"zz"},"type":"list"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "list", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .list(let props) = block.content else { return XCTFail("list fell back: \(block.content)") }
+            XCTAssertNil(props.rows)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"list"}"##), ##"{"id":"b1","props":{},"type":"list"}"##)
     }
 
     func test_block_groups_decodes_and_round_trips() throws {
@@ -56,15 +54,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_groups_without_groups_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{},"type":"groups"}"##, Fallback.Reason.missing(path: ["groups"])),
-            (##"{"id":"b1","props":{"groups":"zz"},"type":"groups"}"##, Fallback.Reason.wrongType(path: ["groups"])),
-        ] {
+    func test_block_groups_without_groups_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"groups"}"##, ##"{"id":"b1","props":{"groups":"zz"},"type":"groups"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "groups", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .groups(let props) = block.content else { return XCTFail("groups fell back: \(block.content)") }
+            XCTAssertNil(props.groups)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"groups"}"##), ##"{"id":"b1","props":{},"type":"groups"}"##)
     }
 
     func test_block_item_decodes_and_round_trips() throws {
@@ -77,15 +73,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_item_without_title_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"fields":[{"label":"label 1"}]},"type":"item"}"##, Fallback.Reason.missing(path: ["title"])),
-            (##"{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":1},"type":"item"}"##, Fallback.Reason.wrongType(path: ["title"])),
-        ] {
+    func test_block_item_without_title_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"fields":[{"label":"label 1"}]},"type":"item"}"##, ##"{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":1},"type":"item"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "item", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .item(let props) = block.content else { return XCTFail("item fell back: \(block.content)") }
+            XCTAssertNil(props.title)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"fields":[{"label":"label 1"}]},"type":"item"}"##), ##"{"id":"b1","props":{"fields":[{"label":"label 1"}]},"type":"item"}"##)
     }
 
     func test_block_header_decodes_and_round_trips() throws {
@@ -98,15 +92,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_header_without_title_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{},"type":"header"}"##, Fallback.Reason.missing(path: ["title"])),
-            (##"{"id":"b1","props":{"title":1},"type":"header"}"##, Fallback.Reason.wrongType(path: ["title"])),
-        ] {
+    func test_block_header_without_title_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"header"}"##, ##"{"id":"b1","props":{"title":1},"type":"header"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "header", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .header(let props) = block.content else { return XCTFail("header fell back: \(block.content)") }
+            XCTAssertNil(props.title)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"header"}"##), ##"{"id":"b1","props":{},"type":"header"}"##)
     }
 
     func test_block_text_decodes_and_round_trips() throws {
@@ -119,15 +111,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_text_without_text_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{},"type":"text"}"##, Fallback.Reason.missing(path: ["text"])),
-            (##"{"id":"b1","props":{"text":1},"type":"text"}"##, Fallback.Reason.wrongType(path: ["text"])),
-        ] {
+    func test_block_text_without_text_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"text"}"##, ##"{"id":"b1","props":{"text":1},"type":"text"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "text", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .text(let props) = block.content else { return XCTFail("text fell back: \(block.content)") }
+            XCTAssertNil(props.text)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"text"}"##), ##"{"id":"b1","props":{},"type":"text"}"##)
     }
 
     func test_block_instruction_decodes_and_round_trips() throws {
@@ -140,15 +130,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_instruction_without_n_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}]},"type":"instruction"}"##, Fallback.Reason.missing(path: ["n"])),
-            (##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}],"n":"zz"},"type":"instruction"}"##, Fallback.Reason.wrongType(path: ["n"])),
-        ] {
+    func test_block_instruction_without_n_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}]},"type":"instruction"}"##, ##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}],"n":"zz"},"type":"instruction"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "instruction", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .instruction(let props) = block.content else { return XCTFail("instruction fell back: \(block.content)") }
+            XCTAssertNil(props.n)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}]},"type":"instruction"}"##), ##"{"id":"b1","props":{"lines":[{"kind":"kind 1"}]},"type":"instruction"}"##)
     }
 
     func test_block_answers_decodes_and_round_trips() throws {
@@ -161,15 +149,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_answers_without_answers_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{},"type":"answers"}"##, Fallback.Reason.missing(path: ["answers"])),
-            (##"{"id":"b1","props":{"answers":"zz"},"type":"answers"}"##, Fallback.Reason.wrongType(path: ["answers"])),
-        ] {
+    func test_block_answers_without_answers_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{},"type":"answers"}"##, ##"{"id":"b1","props":{"answers":"zz"},"type":"answers"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "answers", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .answers(let props) = block.content else { return XCTFail("answers fell back: \(block.content)") }
+            XCTAssertNil(props.answers)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{},"type":"answers"}"##), ##"{"id":"b1","props":{},"type":"answers"}"##)
     }
 
     func test_block_option_decodes_and_round_trips() throws {
@@ -182,15 +168,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_option_without_n_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"text":"text 1"},"type":"option"}"##, Fallback.Reason.missing(path: ["n"])),
-            (##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"n":"zz","text":"text 1"},"type":"option"}"##, Fallback.Reason.wrongType(path: ["n"])),
-        ] {
+    func test_block_option_without_n_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"text":"text 1"},"type":"option"}"##, ##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"n":"zz","text":"text 1"},"type":"option"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "option", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .option(let props) = block.content else { return XCTFail("option fell back: \(block.content)") }
+            XCTAssertNil(props.n)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"text":"text 1"},"type":"option"}"##), ##"{"id":"b1","props":{"answer":{"key":"key 1","label":"label 1","to":"to 1"},"fields":[{"label":"label 1"}],"text":"text 1"},"type":"option"}"##)
     }
 
     func test_block_panel_decodes_and_round_trips() throws {
@@ -203,15 +187,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_panel_without_heading_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"title":"title 1"},"type":"panel"}"##, Fallback.Reason.missing(path: ["heading"])),
-            (##"{"id":"b1","props":{"heading":1,"title":"title 1"},"type":"panel"}"##, Fallback.Reason.wrongType(path: ["heading"])),
-        ] {
+    func test_block_panel_without_heading_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"title":"title 1"},"type":"panel"}"##, ##"{"id":"b1","props":{"heading":1,"title":"title 1"},"type":"panel"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "panel", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .panel(let props) = block.content else { return XCTFail("panel fell back: \(block.content)") }
+            XCTAssertNil(props.heading)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"title":"title 1"},"type":"panel"}"##), ##"{"id":"b1","props":{"title":"title 1"},"type":"panel"}"##)
     }
 
     func test_block_form_decodes_and_round_trips() throws {
@@ -224,15 +206,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_form_without_title_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"}},"type":"form"}"##, Fallback.Reason.missing(path: ["title"])),
-            (##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":1},"type":"form"}"##, Fallback.Reason.wrongType(path: ["title"])),
-        ] {
+    func test_block_form_without_title_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"}},"type":"form"}"##, ##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":1},"type":"form"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "form", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .form(let props) = block.content else { return XCTFail("form fell back: \(block.content)") }
+            XCTAssertNil(props.title)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"}},"type":"form"}"##), ##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"}},"type":"form"}"##)
     }
 
     func test_block_confirm_decodes_and_round_trips() throws {
@@ -245,15 +225,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_confirm_without_title_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1"},"type":"confirm"}"##, Fallback.Reason.missing(path: ["title"])),
-            (##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":1},"type":"confirm"}"##, Fallback.Reason.wrongType(path: ["title"])),
-        ] {
+    func test_block_confirm_without_title_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1"},"type":"confirm"}"##, ##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":1},"type":"confirm"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "confirm", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .confirm(let props) = block.content else { return XCTFail("confirm fell back: \(block.content)") }
+            XCTAssertNil(props.title)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1"},"type":"confirm"}"##), ##"{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1"},"type":"confirm"}"##)
     }
 
     func test_block_plan_decodes_and_round_trips() throws {
@@ -266,15 +244,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_plan_without_title_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}]},"type":"plan"}"##, Fallback.Reason.missing(path: ["title"])),
-            (##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":1},"type":"plan"}"##, Fallback.Reason.wrongType(path: ["title"])),
-        ] {
+    func test_block_plan_without_title_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}]},"type":"plan"}"##, ##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":1},"type":"plan"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "plan", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .plan(let props) = block.content else { return XCTFail("plan fell back: \(block.content)") }
+            XCTAssertNil(props.title)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}]},"type":"plan"}"##), ##"{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}]},"type":"plan"}"##)
     }
 
     func test_block_console_action_decodes_and_round_trips() throws {
@@ -287,15 +263,13 @@ final class ContractTests: XCTestCase {
         }
     }
 
-    func test_block_console_action_without_label_or_with_a_wrong_one_falls_back() throws {
-        for (text, reason) in [
-            (##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##, Fallback.Reason.missing(path: ["label"])),
-            (##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":1,"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##, Fallback.Reason.wrongType(path: ["label"])),
-        ] {
+    func test_block_console_action_without_label_or_with_a_wrong_one_decodes_without_it() throws {
+        for text in [##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##, ##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":1,"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##] {
             let block = try decode(Block.self, text)
-            XCTAssertEqual(block.content, .fallback(Fallback(type: "console_action", reason: reason, raw: try json(text))))
-            try assertRoundTrip(block, text)
+            guard case .consoleAction(let props) = block.content else { return XCTFail("console_action fell back: \(block.content)") }
+            XCTAssertNil(props.label)
         }
+        try assertRoundTrip(try decode(Block.self, ##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##), ##"{"id":"b1","props":{"available":true,"keys":["keys 1"],"operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"}"##)
     }
 
     func test_an_unknown_block_or_one_that_is_none_falls_back_and_round_trips() throws {
@@ -928,13 +902,10 @@ final class ContractTests: XCTestCase {
         XCTAssertThrowsError(try decode(ControlRequest.self, ##"{"a":1,"op":"zz_unknown"}"##))
     }
 
-    func test_control_message_worker_inspect_result_whose_fields_do_not_decode_is_undecodable() throws {
-        for (text, reason) in [
-            (##"{"channel":"control","op":"worker_inspect_result","version":"0.1.0","view":{"activity":"activity 1","activity_at":"activity_at 1","confirmed_at":"confirmed_at 1","descriptor":{"capability_version":"capability_version 1","configured_model":"configured_model 1","consumption_evidence":true,"durable_accept_query":true,"harness":"harness 1","harness_version":"harness_version 1","queued_input":true,"reported_model":"reported_model 1"},"execution":{"attempt":"attempt 1","turn":"turn 1","worker":{"environment":"environment 1","machine":"machine 1","worker":"worker 1"}},"guidance":{"available":true,"reason":"reason 1"},"item":"item 1","item_title":"item_title 1","item_to":"item_to 1","lease_until":"lease_until 1","outcome":"outcome 1","output":{"available":true,"reason":"reason 1","replay":true},"reason":"reason 1","state":"state 1"}}"##, Fallback.Reason.missing(path: ["id"])),
-            (##"{"channel":"control","id":1,"op":"worker_inspect_result","version":"0.1.0","view":{"activity":"activity 1","activity_at":"activity_at 1","confirmed_at":"confirmed_at 1","descriptor":{"capability_version":"capability_version 1","configured_model":"configured_model 1","consumption_evidence":true,"durable_accept_query":true,"harness":"harness 1","harness_version":"harness_version 1","queued_input":true,"reported_model":"reported_model 1"},"execution":{"attempt":"attempt 1","turn":"turn 1","worker":{"environment":"environment 1","machine":"machine 1","worker":"worker 1"}},"guidance":{"available":true,"reason":"reason 1"},"item":"item 1","item_title":"item_title 1","item_to":"item_to 1","lease_until":"lease_until 1","outcome":"outcome 1","output":{"available":true,"reason":"reason 1","replay":true},"reason":"reason 1","state":"state 1"}}"##, Fallback.Reason.wrongType(path: ["id"])),
-        ] {
-            XCTAssertEqual(try decode(ControlMessage.self, text), .undecodable(try json(text), reason))
-            try assertRoundTrip(try decode(ControlMessage.self, text), text)
+    func test_control_message_worker_inspect_result_without_a_field_or_with_a_wrong_one_still_decodes() throws {
+        for text in [##"{"channel":"control","op":"worker_inspect_result","version":"0.1.0","view":{"activity":"activity 1","activity_at":"activity_at 1","confirmed_at":"confirmed_at 1","descriptor":{"capability_version":"capability_version 1","configured_model":"configured_model 1","consumption_evidence":true,"durable_accept_query":true,"harness":"harness 1","harness_version":"harness_version 1","queued_input":true,"reported_model":"reported_model 1"},"execution":{"attempt":"attempt 1","turn":"turn 1","worker":{"environment":"environment 1","machine":"machine 1","worker":"worker 1"}},"guidance":{"available":true,"reason":"reason 1"},"item":"item 1","item_title":"item_title 1","item_to":"item_to 1","lease_until":"lease_until 1","outcome":"outcome 1","output":{"available":true,"reason":"reason 1","replay":true},"reason":"reason 1","state":"state 1"}}"##, ##"{"channel":"control","id":1,"op":"worker_inspect_result","version":"0.1.0","view":{"activity":"activity 1","activity_at":"activity_at 1","confirmed_at":"confirmed_at 1","descriptor":{"capability_version":"capability_version 1","configured_model":"configured_model 1","consumption_evidence":true,"durable_accept_query":true,"harness":"harness 1","harness_version":"harness_version 1","queued_input":true,"reported_model":"reported_model 1"},"execution":{"attempt":"attempt 1","turn":"turn 1","worker":{"environment":"environment 1","machine":"machine 1","worker":"worker 1"}},"guidance":{"available":true,"reason":"reason 1"},"item":"item 1","item_title":"item_title 1","item_to":"item_to 1","lease_until":"lease_until 1","outcome":"outcome 1","output":{"available":true,"reason":"reason 1","replay":true},"reason":"reason 1","state":"state 1"}}"##] {
+            guard case .workerInspectResult(let message) = try decode(ControlMessage.self, text) else { return XCTFail("does not decode as workerInspectResult") }
+            XCTAssertNil(message.id)
         }
     }
 
@@ -990,13 +961,10 @@ final class ContractTests: XCTestCase {
         XCTAssertThrowsError(try decode(SteerRequest.self, ##"{"a":1,"op":"zz_unknown"}"##))
     }
 
-    func test_steer_message_notice_whose_fields_do_not_decode_is_undecodable() throws {
-        for (text, reason) in [
-            (##"{"at":"at 1","op":"notice","tone":"tone 1"}"##, Fallback.Reason.missing(path: ["text"])),
-            (##"{"at":"at 1","op":"notice","text":1,"tone":"tone 1"}"##, Fallback.Reason.wrongType(path: ["text"])),
-        ] {
-            XCTAssertEqual(try decode(SteerMessage.self, text), .undecodable(try json(text), reason))
-            try assertRoundTrip(try decode(SteerMessage.self, text), text)
+    func test_steer_message_notice_without_a_field_or_with_a_wrong_one_still_decodes() throws {
+        for text in [##"{"at":"at 1","op":"notice","tone":"tone 1"}"##, ##"{"at":"at 1","op":"notice","text":1,"tone":"tone 1"}"##] {
+            guard case .notice(let message) = try decode(SteerMessage.self, text) else { return XCTFail("does not decode as notice") }
+            XCTAssertNil(message.text)
         }
     }
 }

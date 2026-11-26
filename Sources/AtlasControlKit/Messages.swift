@@ -283,12 +283,18 @@ public struct TurnEndRequest: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerInspectResultMessage: Codable, Sendable, Equatable {
-    public var id: String
-    public var view: WorkerViewModel
+    public var id: String?
+    public var view: WorkerViewModel?
 
-    public init(id: String, view: WorkerViewModel) {
+    public init(id: String? = nil, view: WorkerViewModel? = nil) {
         self.id = id
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -299,12 +305,18 @@ public struct WorkerInspectResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerInspectErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
 
-    public init(error: RuntimeErrorModel, id: String) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil) {
         self.error = error
         self.id = id
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -315,12 +327,18 @@ public struct WorkerInspectErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerSubmitResultMessage: Codable, Sendable, Equatable {
-    public var id: String
-    public var interaction: WorkerInteractionModel
+    public var id: String?
+    public var interaction: WorkerInteractionModel?
 
-    public init(id: String, interaction: WorkerInteractionModel) {
+    public init(id: String? = nil, interaction: WorkerInteractionModel? = nil) {
         self.id = id
         self.interaction = interaction
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        interaction = try? c.decodeIfPresent(WorkerInteractionModel.self, forKey: .interaction)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -331,12 +349,18 @@ public struct WorkerSubmitResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerSubmitErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
 
-    public init(error: RuntimeErrorModel, id: String) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil) {
         self.error = error
         self.id = id
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -347,14 +371,21 @@ public struct WorkerSubmitErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerQueryResultMessage: Codable, Sendable, Equatable {
-    public var found: Bool
-    public var id: String
+    public var found: Bool?
+    public var id: String?
     public var interaction: WorkerInteractionModel?
 
-    public init(found: Bool, id: String, interaction: WorkerInteractionModel? = nil) {
+    public init(found: Bool? = nil, id: String? = nil, interaction: WorkerInteractionModel? = nil) {
         self.found = found
         self.id = id
         self.interaction = interaction
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        found = try? c.decodeIfPresent(Bool.self, forKey: .found)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        interaction = try? c.decodeIfPresent(WorkerInteractionModel.self, forKey: .interaction)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -366,12 +397,18 @@ public struct WorkerQueryResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerQueryErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
 
-    public init(error: RuntimeErrorModel, id: String) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil) {
         self.error = error
         self.id = id
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -382,16 +419,24 @@ public struct WorkerQueryErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerHistoryResultMessage: Codable, Sendable, Equatable {
-    public var cursor: String
-    public var id: String
-    public var interactions: [WorkerInteractionModel]
-    public var more: Bool
+    public var cursor: String?
+    public var id: String?
+    public var interactions: [WorkerInteractionModel]?
+    public var more: Bool?
 
-    public init(cursor: String, id: String, interactions: [WorkerInteractionModel], more: Bool) {
+    public init(cursor: String? = nil, id: String? = nil, interactions: [WorkerInteractionModel]? = nil, more: Bool? = nil) {
         self.cursor = cursor
         self.id = id
         self.interactions = interactions
         self.more = more
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        interactions = try? c.decodeIfPresent([WorkerInteractionModel].self, forKey: .interactions)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -404,12 +449,18 @@ public struct WorkerHistoryResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerHistoryErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
 
-    public init(error: RuntimeErrorModel, id: String) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil) {
         self.error = error
         self.id = id
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -420,16 +471,24 @@ public struct WorkerHistoryErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerReceiptsResultMessage: Codable, Sendable, Equatable {
-    public var cursor: String
-    public var id: String
-    public var more: Bool
-    public var receipts: [WorkerReceiptModel]
+    public var cursor: String?
+    public var id: String?
+    public var more: Bool?
+    public var receipts: [WorkerReceiptModel]?
 
-    public init(cursor: String, id: String, more: Bool, receipts: [WorkerReceiptModel]) {
+    public init(cursor: String? = nil, id: String? = nil, more: Bool? = nil, receipts: [WorkerReceiptModel]? = nil) {
         self.cursor = cursor
         self.id = id
         self.more = more
         self.receipts = receipts
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
+        receipts = try? c.decodeIfPresent([WorkerReceiptModel].self, forKey: .receipts)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -442,12 +501,18 @@ public struct WorkerReceiptsResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerReceiptsErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
 
-    public init(error: RuntimeErrorModel, id: String) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil) {
         self.error = error
         self.id = id
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -458,20 +523,30 @@ public struct WorkerReceiptsErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputSubscribeResultMessage: Codable, Sendable, Equatable {
-    public var cursor: String
-    public var id: String
+    public var cursor: String?
+    public var id: String?
     public var reset: RuntimeOutputResetModel?
-    public var stream: RuntimeOutputStreamModel
-    public var subscription: String
-    public var view: WorkerViewModel
+    public var stream: RuntimeOutputStreamModel?
+    public var subscription: String?
+    public var view: WorkerViewModel?
 
-    public init(cursor: String, id: String, reset: RuntimeOutputResetModel? = nil, stream: RuntimeOutputStreamModel, subscription: String, view: WorkerViewModel) {
+    public init(cursor: String? = nil, id: String? = nil, reset: RuntimeOutputResetModel? = nil, stream: RuntimeOutputStreamModel? = nil, subscription: String? = nil, view: WorkerViewModel? = nil) {
         self.cursor = cursor
         self.id = id
         self.reset = reset
         self.stream = stream
         self.subscription = subscription
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        stream = try? c.decodeIfPresent(RuntimeOutputStreamModel.self, forKey: .stream)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -486,16 +561,24 @@ public struct WorkerOutputSubscribeResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputSubscribeErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
     public var reset: RuntimeOutputResetModel?
     public var view: WorkerViewModel?
 
-    public init(error: RuntimeErrorModel, id: String, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
         self.error = error
         self.id = id
         self.reset = reset
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -508,16 +591,16 @@ public struct WorkerOutputSubscribeErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputNextResultMessage: Codable, Sendable, Equatable {
-    public var cursor: String
-    public var events: [RuntimeOutputEventModel]
-    public var id: String
-    public var more: Bool
+    public var cursor: String?
+    public var events: [RuntimeOutputEventModel]?
+    public var id: String?
+    public var more: Bool?
     public var reset: RuntimeOutputResetModel?
-    public var stream: RuntimeOutputStreamModel
-    public var subscription: String
+    public var stream: RuntimeOutputStreamModel?
+    public var subscription: String?
     public var view: WorkerViewModel?
 
-    public init(cursor: String, events: [RuntimeOutputEventModel], id: String, more: Bool, reset: RuntimeOutputResetModel? = nil, stream: RuntimeOutputStreamModel, subscription: String, view: WorkerViewModel? = nil) {
+    public init(cursor: String? = nil, events: [RuntimeOutputEventModel]? = nil, id: String? = nil, more: Bool? = nil, reset: RuntimeOutputResetModel? = nil, stream: RuntimeOutputStreamModel? = nil, subscription: String? = nil, view: WorkerViewModel? = nil) {
         self.cursor = cursor
         self.events = events
         self.id = id
@@ -526,6 +609,18 @@ public struct WorkerOutputNextResultMessage: Codable, Sendable, Equatable {
         self.stream = stream
         self.subscription = subscription
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        events = try? c.decodeIfPresent([RuntimeOutputEventModel].self, forKey: .events)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        stream = try? c.decodeIfPresent(RuntimeOutputStreamModel.self, forKey: .stream)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -542,16 +637,24 @@ public struct WorkerOutputNextResultMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputNextErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
     public var reset: RuntimeOutputResetModel?
     public var view: WorkerViewModel?
 
-    public init(error: RuntimeErrorModel, id: String, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
         self.error = error
         self.id = id
         self.reset = reset
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -564,12 +667,18 @@ public struct WorkerOutputNextErrorMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputUnsubscribeResultMessage: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
+    public var id: String?
+    public var subscription: String?
 
-    public init(id: String, subscription: String) {
+    public init(id: String? = nil, subscription: String? = nil) {
         self.id = id
         self.subscription = subscription
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -580,16 +689,24 @@ public struct WorkerOutputUnsubscribeResultMessage: Codable, Sendable, Equatable
 
 /// The fields of a message (its selectors are the case's).
 public struct WorkerOutputUnsubscribeErrorMessage: Codable, Sendable, Equatable {
-    public var error: RuntimeErrorModel
-    public var id: String
+    public var error: RuntimeErrorModel?
+    public var id: String?
     public var reset: RuntimeOutputResetModel?
     public var view: WorkerViewModel?
 
-    public init(error: RuntimeErrorModel, id: String, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
+    public init(error: RuntimeErrorModel? = nil, id: String? = nil, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
         self.error = error
         self.id = id
         self.reset = reset
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -603,15 +720,15 @@ public struct WorkerOutputUnsubscribeErrorMessage: Codable, Sendable, Equatable 
 /// The fields of a message (its selectors are the case's).
 public struct BootShellMessage: Codable, Sendable, Equatable {
     public var activeTab: String?
-    public var env: String
+    public var env: String?
     public var greeting: String?
-    public var initialTo: String
-    public var revision: String
-    public var spec: String
-    public var tabs: [ShellTabModel]
-    public var title: String
+    public var initialTo: String?
+    public var revision: String?
+    public var spec: String?
+    public var tabs: [ShellTabModel]?
+    public var title: String?
 
-    public init(activeTab: String? = nil, env: String, greeting: String? = nil, initialTo: String, revision: String, spec: String, tabs: [ShellTabModel], title: String) {
+    public init(activeTab: String? = nil, env: String? = nil, greeting: String? = nil, initialTo: String? = nil, revision: String? = nil, spec: String? = nil, tabs: [ShellTabModel]? = nil, title: String? = nil) {
         self.activeTab = activeTab
         self.env = env
         self.greeting = greeting
@@ -620,6 +737,18 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
         self.spec = spec
         self.tabs = tabs
         self.title = title
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        activeTab = try? c.decodeIfPresent(String.self, forKey: .activeTab)
+        env = try? c.decodeIfPresent(String.self, forKey: .env)
+        greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
+        initialTo = try? c.decodeIfPresent(String.self, forKey: .initialTo)
+        revision = try? c.decodeIfPresent(String.self, forKey: .revision)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
+        tabs = try? c.decodeIfPresent([ShellTabModel].self, forKey: .tabs)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -636,10 +765,15 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct BootErrorMessage: Codable, Sendable, Equatable {
-    public var error: String
+    public var error: String?
 
-    public init(error: String) {
+    public init(error: String? = nil) {
         self.error = error
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(String.self, forKey: .error)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -652,15 +786,15 @@ public struct PageMessage: Codable, Sendable, Equatable {
     public var actionsRevision: String?
     public var at: String?
     public var back: String?
-    public var blocks: [Block]
+    public var blocks: [Block]?
     public var count: String?
-    public var markup: [MarkupEntry]
-    public var path: String
+    public var markup: [MarkupEntry]?
+    public var path: String?
     public var position: Int?
     public var refused: [JSONValue]?
-    public var title: String
+    public var title: String?
 
-    public init(actionsRevision: String? = nil, at: String? = nil, back: String? = nil, blocks: [Block], count: String? = nil, markup: [MarkupEntry], path: String, position: Int? = nil, refused: [JSONValue]? = nil, title: String) {
+    public init(actionsRevision: String? = nil, at: String? = nil, back: String? = nil, blocks: [Block]? = nil, count: String? = nil, markup: [MarkupEntry]? = nil, path: String? = nil, position: Int? = nil, refused: [JSONValue]? = nil, title: String? = nil) {
         self.actionsRevision = actionsRevision
         self.at = at
         self.back = back
@@ -671,6 +805,20 @@ public struct PageMessage: Codable, Sendable, Equatable {
         self.position = position
         self.refused = refused
         self.title = title
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        actionsRevision = try? c.decodeIfPresent(String.self, forKey: .actionsRevision)
+        at = try? c.decodeIfPresent(String.self, forKey: .at)
+        back = try? c.decodeIfPresent(String.self, forKey: .back)
+        blocks = try? c.decodeIfPresent([Block].self, forKey: .blocks)
+        count = try? c.decodeIfPresent(String.self, forKey: .count)
+        markup = try? c.decodeIfPresent([MarkupEntry].self, forKey: .markup)
+        path = try? c.decodeIfPresent(String.self, forKey: .path)
+        position = try? c.decodeIfPresent(Int.self, forKey: .position)
+        refused = try? c.decodeIfPresent([JSONValue].self, forKey: .refused)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -689,14 +837,21 @@ public struct PageMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct WelcomeMessage: Codable, Sendable, Equatable {
-    public var env: String
-    public var spec: String
+    public var env: String?
+    public var spec: String?
     public var surface: String?
 
-    public init(env: String, spec: String, surface: String? = nil) {
+    public init(env: String? = nil, spec: String? = nil, surface: String? = nil) {
         self.env = env
         self.spec = spec
         self.surface = surface
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        env = try? c.decodeIfPresent(String.self, forKey: .env)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
+        surface = try? c.decodeIfPresent(String.self, forKey: .surface)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -708,14 +863,21 @@ public struct WelcomeMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct TurnMessage: Codable, Sendable, Equatable {
-    public var key: String
-    public var on: String
+    public var key: String?
+    public var on: String?
     public var readFirst: String?
 
-    public init(key: String, on: String, readFirst: String? = nil) {
+    public init(key: String? = nil, on: String? = nil, readFirst: String? = nil) {
         self.key = key
         self.on = on
         self.readFirst = readFirst
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        on = try? c.decodeIfPresent(String.self, forKey: .on)
+        readFirst = try? c.decodeIfPresent(String.self, forKey: .readFirst)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -727,10 +889,15 @@ public struct TurnMessage: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct TurnErrorMessage: Codable, Sendable, Equatable {
-    public var error: String
+    public var error: String?
 
-    public init(error: String) {
+    public init(error: String? = nil) {
         self.error = error
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(String.self, forKey: .error)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -741,13 +908,20 @@ public struct TurnErrorMessage: Codable, Sendable, Equatable {
 /// The fields of a message (its selectors are the case's).
 public struct NoticeMessage: Codable, Sendable, Equatable {
     public var at: String?
-    public var text: String
-    public var tone: String
+    public var text: String?
+    public var tone: String?
 
-    public init(at: String? = nil, text: String, tone: String) {
+    public init(at: String? = nil, text: String? = nil, tone: String? = nil) {
         self.at = at
         self.text = text
         self.tone = tone
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        at = try? c.decodeIfPresent(String.self, forKey: .at)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -761,12 +935,19 @@ public struct NoticeMessage: Codable, Sendable, Equatable {
 public struct ByeMessage: Codable, Sendable, Equatable {
     public var reason: String?
     public var spec: String?
-    public var text: String
+    public var text: String?
 
-    public init(reason: String? = nil, spec: String? = nil, text: String) {
+    public init(reason: String? = nil, spec: String? = nil, text: String? = nil) {
         self.reason = reason
         self.spec = spec
         self.text = text
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -810,10 +991,15 @@ public struct RunRequest: Codable, Sendable, Equatable {
 
 /// The fields of a message (its selectors are the case's).
 public struct PlanMessage: Codable, Sendable, Equatable {
-    public var block: Block
+    public var block: Block?
 
-    public init(block: Block) {
+    public init(block: Block? = nil) {
         self.block = block
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        block = try? c.decodeIfPresent(Block.self, forKey: .block)
     }
 
     enum CodingKeys: String, CodingKey {

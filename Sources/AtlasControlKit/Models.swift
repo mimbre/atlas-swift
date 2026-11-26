@@ -3,12 +3,18 @@ import Foundation
 
 /// The model `runtime_machine`.
 public struct RuntimeMachineModel: Codable, Sendable, Equatable {
-    public var environment: String
-    public var machine: String
+    public var environment: String?
+    public var machine: String?
 
-    public init(environment: String, machine: String) {
+    public init(environment: String? = nil, machine: String? = nil) {
         self.environment = environment
         self.machine = machine
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        environment = try? c.decodeIfPresent(String.self, forKey: .environment)
+        machine = try? c.decodeIfPresent(String.self, forKey: .machine)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -27,6 +33,12 @@ public struct RuntimeMachineStatusOptionsModel: Codable, Sendable, Equatable {
         self.json = json
     }
 
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        machine = try? c.decodeIfPresent(String.self, forKey: .machine)
+        json = try? c.decodeIfPresent(Bool.self, forKey: .json)
+    }
+
     enum CodingKeys: String, CodingKey {
         case machine
         case json
@@ -35,10 +47,15 @@ public struct RuntimeMachineStatusOptionsModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_discovery_options`.
 public struct RuntimeDiscoveryOptionsModel: Codable, Sendable, Equatable {
-    public var machine: String
+    public var machine: String?
 
-    public init(machine: String) {
+    public init(machine: String? = nil) {
         self.machine = machine
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        machine = try? c.decodeIfPresent(String.self, forKey: .machine)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -48,14 +65,21 @@ public struct RuntimeDiscoveryOptionsModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_machine_availability`.
 public struct RuntimeMachineAvailabilityModel: Codable, Sendable, Equatable {
-    public var target: RuntimeMachineModel
-    public var registered: Bool
-    public var basis: String
+    public var target: RuntimeMachineModel?
+    public var registered: Bool?
+    public var basis: String?
 
-    public init(target: RuntimeMachineModel, registered: Bool, basis: String) {
+    public init(target: RuntimeMachineModel? = nil, registered: Bool? = nil, basis: String? = nil) {
         self.target = target
         self.registered = registered
         self.basis = basis
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        target = try? c.decodeIfPresent(RuntimeMachineModel.self, forKey: .target)
+        registered = try? c.decodeIfPresent(Bool.self, forKey: .registered)
+        basis = try? c.decodeIfPresent(String.self, forKey: .basis)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -67,18 +91,27 @@ public struct RuntimeMachineAvailabilityModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_machine_boot`.
 public struct RuntimeMachineBootModel: Codable, Sendable, Equatable {
-    public var environment: String
-    public var machine: String
-    public var configuration: String
-    public var directory: String
-    public var instance: String
+    public var environment: String?
+    public var machine: String?
+    public var configuration: String?
+    public var directory: String?
+    public var instance: String?
 
-    public init(environment: String, machine: String, configuration: String, directory: String, instance: String) {
+    public init(environment: String? = nil, machine: String? = nil, configuration: String? = nil, directory: String? = nil, instance: String? = nil) {
         self.environment = environment
         self.machine = machine
         self.configuration = configuration
         self.directory = directory
         self.instance = instance
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        environment = try? c.decodeIfPresent(String.self, forKey: .environment)
+        machine = try? c.decodeIfPresent(String.self, forKey: .machine)
+        configuration = try? c.decodeIfPresent(String.self, forKey: .configuration)
+        directory = try? c.decodeIfPresent(String.self, forKey: .directory)
+        instance = try? c.decodeIfPresent(String.self, forKey: .instance)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -92,14 +125,21 @@ public struct RuntimeMachineBootModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_machine_boot_receipt`.
 public struct RuntimeMachineBootReceiptModel: Codable, Sendable, Equatable {
-    public var target: RuntimeMachineModel
-    public var instance: String
-    public var pid: Int
+    public var target: RuntimeMachineModel?
+    public var instance: String?
+    public var pid: Int?
 
-    public init(target: RuntimeMachineModel, instance: String, pid: Int) {
+    public init(target: RuntimeMachineModel? = nil, instance: String? = nil, pid: Int? = nil) {
         self.target = target
         self.instance = instance
         self.pid = pid
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        target = try? c.decodeIfPresent(RuntimeMachineModel.self, forKey: .target)
+        instance = try? c.decodeIfPresent(String.self, forKey: .instance)
+        pid = try? c.decodeIfPresent(Int.self, forKey: .pid)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -111,16 +151,24 @@ public struct RuntimeMachineBootReceiptModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_machine_capabilities`.
 public struct RuntimeMachineCapabilitiesModel: Codable, Sendable, Equatable {
-    public var localStatus: Bool
-    public var localStart: Bool
-    public var localStop: Bool
-    public var remoteStatus: Bool
+    public var localStatus: Bool?
+    public var localStart: Bool?
+    public var localStop: Bool?
+    public var remoteStatus: Bool?
 
-    public init(localStatus: Bool, localStart: Bool, localStop: Bool, remoteStatus: Bool) {
+    public init(localStatus: Bool? = nil, localStart: Bool? = nil, localStop: Bool? = nil, remoteStatus: Bool? = nil) {
         self.localStatus = localStatus
         self.localStart = localStart
         self.localStop = localStop
         self.remoteStatus = remoteStatus
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        localStatus = try? c.decodeIfPresent(Bool.self, forKey: .localStatus)
+        localStart = try? c.decodeIfPresent(Bool.self, forKey: .localStart)
+        localStop = try? c.decodeIfPresent(Bool.self, forKey: .localStop)
+        remoteStatus = try? c.decodeIfPresent(Bool.self, forKey: .remoteStatus)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -133,16 +181,16 @@ public struct RuntimeMachineCapabilitiesModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_machine_status`.
 public struct RuntimeMachineStatusModel: Codable, Sendable, Equatable {
-    public var target: RuntimeMachineModel
-    public var state: String
-    public var basis: String
-    public var message: String
-    public var capabilities: RuntimeMachineCapabilitiesModel
+    public var target: RuntimeMachineModel?
+    public var state: String?
+    public var basis: String?
+    public var message: String?
+    public var capabilities: RuntimeMachineCapabilitiesModel?
     public var pid: Int?
     public var processPresent: Bool?
     public var log: String?
 
-    public init(target: RuntimeMachineModel, state: String, basis: String, message: String, capabilities: RuntimeMachineCapabilitiesModel, pid: Int? = nil, processPresent: Bool? = nil, log: String? = nil) {
+    public init(target: RuntimeMachineModel? = nil, state: String? = nil, basis: String? = nil, message: String? = nil, capabilities: RuntimeMachineCapabilitiesModel? = nil, pid: Int? = nil, processPresent: Bool? = nil, log: String? = nil) {
         self.target = target
         self.state = state
         self.basis = basis
@@ -151,6 +199,18 @@ public struct RuntimeMachineStatusModel: Codable, Sendable, Equatable {
         self.pid = pid
         self.processPresent = processPresent
         self.log = log
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        target = try? c.decodeIfPresent(RuntimeMachineModel.self, forKey: .target)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        basis = try? c.decodeIfPresent(String.self, forKey: .basis)
+        message = try? c.decodeIfPresent(String.self, forKey: .message)
+        capabilities = try? c.decodeIfPresent(RuntimeMachineCapabilitiesModel.self, forKey: .capabilities)
+        pid = try? c.decodeIfPresent(Int.self, forKey: .pid)
+        processPresent = try? c.decodeIfPresent(Bool.self, forKey: .processPresent)
+        log = try? c.decodeIfPresent(String.self, forKey: .log)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -167,14 +227,21 @@ public struct RuntimeMachineStatusModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_worker`.
 public struct RuntimeWorkerModel: Codable, Sendable, Equatable {
-    public var environment: String
-    public var machine: String
-    public var worker: String
+    public var environment: String?
+    public var machine: String?
+    public var worker: String?
 
-    public init(environment: String, machine: String, worker: String) {
+    public init(environment: String? = nil, machine: String? = nil, worker: String? = nil) {
         self.environment = environment
         self.machine = machine
         self.worker = worker
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        environment = try? c.decodeIfPresent(String.self, forKey: .environment)
+        machine = try? c.decodeIfPresent(String.self, forKey: .machine)
+        worker = try? c.decodeIfPresent(String.self, forKey: .worker)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -186,14 +253,21 @@ public struct RuntimeWorkerModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_execution`.
 public struct RuntimeExecutionModel: Codable, Sendable, Equatable {
-    public var worker: RuntimeWorkerModel
-    public var turn: String
+    public var worker: RuntimeWorkerModel?
+    public var turn: String?
     public var attempt: String?
 
-    public init(worker: RuntimeWorkerModel, turn: String, attempt: String? = nil) {
+    public init(worker: RuntimeWorkerModel? = nil, turn: String? = nil, attempt: String? = nil) {
         self.worker = worker
         self.turn = turn
         self.attempt = attempt
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        worker = try? c.decodeIfPresent(RuntimeWorkerModel.self, forKey: .worker)
+        turn = try? c.decodeIfPresent(String.self, forKey: .turn)
+        attempt = try? c.decodeIfPresent(String.self, forKey: .attempt)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -205,18 +279,27 @@ public struct RuntimeExecutionModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_output_stream`.
 public struct RuntimeOutputStreamModel: Codable, Sendable, Equatable {
-    public var execution: RuntimeExecutionModel
-    public var epoch: String
-    public var firstSequence: Int
-    public var watermark: Int
-    public var ended: Bool
+    public var execution: RuntimeExecutionModel?
+    public var epoch: String?
+    public var firstSequence: Int?
+    public var watermark: Int?
+    public var ended: Bool?
 
-    public init(execution: RuntimeExecutionModel, epoch: String, firstSequence: Int, watermark: Int, ended: Bool) {
+    public init(execution: RuntimeExecutionModel? = nil, epoch: String? = nil, firstSequence: Int? = nil, watermark: Int? = nil, ended: Bool? = nil) {
         self.execution = execution
         self.epoch = epoch
         self.firstSequence = firstSequence
         self.watermark = watermark
         self.ended = ended
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        epoch = try? c.decodeIfPresent(String.self, forKey: .epoch)
+        firstSequence = try? c.decodeIfPresent(Int.self, forKey: .firstSequence)
+        watermark = try? c.decodeIfPresent(Int.self, forKey: .watermark)
+        ended = try? c.decodeIfPresent(Bool.self, forKey: .ended)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -230,18 +313,27 @@ public struct RuntimeOutputStreamModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_output_event`.
 public struct RuntimeOutputEventModel: Codable, Sendable, Equatable {
-    public var sequence: Int
-    public var kind: String
+    public var sequence: Int?
+    public var kind: String?
     public var text: String?
     public var toolName: String?
     public var status: String?
 
-    public init(sequence: Int, kind: String, text: String? = nil, toolName: String? = nil, status: String? = nil) {
+    public init(sequence: Int? = nil, kind: String? = nil, text: String? = nil, toolName: String? = nil, status: String? = nil) {
         self.sequence = sequence
         self.kind = kind
         self.text = text
         self.toolName = toolName
         self.status = status
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        sequence = try? c.decodeIfPresent(Int.self, forKey: .sequence)
+        kind = try? c.decodeIfPresent(String.self, forKey: .kind)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        toolName = try? c.decodeIfPresent(String.self, forKey: .toolName)
+        status = try? c.decodeIfPresent(String.self, forKey: .status)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -255,14 +347,21 @@ public struct RuntimeOutputEventModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_output_reset`.
 public struct RuntimeOutputResetModel: Codable, Sendable, Equatable {
-    public var reason: String
+    public var reason: String?
     public var fromSequence: Int?
     public var toSequence: Int?
 
-    public init(reason: String, fromSequence: Int? = nil, toSequence: Int? = nil) {
+    public init(reason: String? = nil, fromSequence: Int? = nil, toSequence: Int? = nil) {
         self.reason = reason
         self.fromSequence = fromSequence
         self.toSequence = toSequence
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
+        fromSequence = try? c.decodeIfPresent(Int.self, forKey: .fromSequence)
+        toSequence = try? c.decodeIfPresent(Int.self, forKey: .toSequence)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -274,16 +373,24 @@ public struct RuntimeOutputResetModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_controls`.
 public struct RuntimeControlsModel: Codable, Sendable, Equatable {
-    public var status: Bool
-    public var start: Bool
-    public var stop: Bool
-    public var stubMode: Bool
+    public var status: Bool?
+    public var start: Bool?
+    public var stop: Bool?
+    public var stubMode: Bool?
 
-    public init(status: Bool, start: Bool, stop: Bool, stubMode: Bool) {
+    public init(status: Bool? = nil, start: Bool? = nil, stop: Bool? = nil, stubMode: Bool? = nil) {
         self.status = status
         self.start = start
         self.stop = stop
         self.stubMode = stubMode
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        status = try? c.decodeIfPresent(Bool.self, forKey: .status)
+        start = try? c.decodeIfPresent(Bool.self, forKey: .start)
+        stop = try? c.decodeIfPresent(Bool.self, forKey: .stop)
+        stubMode = try? c.decodeIfPresent(Bool.self, forKey: .stubMode)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -296,17 +403,17 @@ public struct RuntimeControlsModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_harness_capabilities`.
 public struct RuntimeHarnessCapabilitiesModel: Codable, Sendable, Equatable {
-    public var harness: String
-    public var harnessVersion: String
-    public var capabilityVersion: String
+    public var harness: String?
+    public var harnessVersion: String?
+    public var capabilityVersion: String?
     public var configuredModel: String?
     public var reportedModel: String?
-    public var queuedInput: Bool
-    public var durableAcceptQuery: Bool
-    public var consumptionEvidence: Bool
-    public var literalText: Bool
+    public var queuedInput: Bool?
+    public var durableAcceptQuery: Bool?
+    public var consumptionEvidence: Bool?
+    public var literalText: Bool?
 
-    public init(harness: String, harnessVersion: String, capabilityVersion: String, configuredModel: String? = nil, reportedModel: String? = nil, queuedInput: Bool, durableAcceptQuery: Bool, consumptionEvidence: Bool, literalText: Bool) {
+    public init(harness: String? = nil, harnessVersion: String? = nil, capabilityVersion: String? = nil, configuredModel: String? = nil, reportedModel: String? = nil, queuedInput: Bool? = nil, durableAcceptQuery: Bool? = nil, consumptionEvidence: Bool? = nil, literalText: Bool? = nil) {
         self.harness = harness
         self.harnessVersion = harnessVersion
         self.capabilityVersion = capabilityVersion
@@ -316,6 +423,19 @@ public struct RuntimeHarnessCapabilitiesModel: Codable, Sendable, Equatable {
         self.durableAcceptQuery = durableAcceptQuery
         self.consumptionEvidence = consumptionEvidence
         self.literalText = literalText
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        harness = try? c.decodeIfPresent(String.self, forKey: .harness)
+        harnessVersion = try? c.decodeIfPresent(String.self, forKey: .harnessVersion)
+        capabilityVersion = try? c.decodeIfPresent(String.self, forKey: .capabilityVersion)
+        configuredModel = try? c.decodeIfPresent(String.self, forKey: .configuredModel)
+        reportedModel = try? c.decodeIfPresent(String.self, forKey: .reportedModel)
+        queuedInput = try? c.decodeIfPresent(Bool.self, forKey: .queuedInput)
+        durableAcceptQuery = try? c.decodeIfPresent(Bool.self, forKey: .durableAcceptQuery)
+        consumptionEvidence = try? c.decodeIfPresent(Bool.self, forKey: .consumptionEvidence)
+        literalText = try? c.decodeIfPresent(Bool.self, forKey: .literalText)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -333,12 +453,18 @@ public struct RuntimeHarnessCapabilitiesModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_capabilities`.
 public struct RuntimeCapabilitiesModel: Codable, Sendable, Equatable {
-    public var controls: RuntimeControlsModel
+    public var controls: RuntimeControlsModel?
     public var harness: RuntimeHarnessCapabilitiesModel?
 
-    public init(controls: RuntimeControlsModel, harness: RuntimeHarnessCapabilitiesModel? = nil) {
+    public init(controls: RuntimeControlsModel? = nil, harness: RuntimeHarnessCapabilitiesModel? = nil) {
         self.controls = controls
         self.harness = harness
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        controls = try? c.decodeIfPresent(RuntimeControlsModel.self, forKey: .controls)
+        harness = try? c.decodeIfPresent(RuntimeHarnessCapabilitiesModel.self, forKey: .harness)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -349,15 +475,15 @@ public struct RuntimeCapabilitiesModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_turn`.
 public struct RuntimeTurnModel: Codable, Sendable, Equatable {
-    public var execution: RuntimeExecutionModel
-    public var item: String
-    public var state: String
+    public var execution: RuntimeExecutionModel?
+    public var item: String?
+    public var state: String?
     public var activity: String?
     public var leaseUntil: String?
     public var outcome: String?
     public var reason: String?
 
-    public init(execution: RuntimeExecutionModel, item: String, state: String, activity: String? = nil, leaseUntil: String? = nil, outcome: String? = nil, reason: String? = nil) {
+    public init(execution: RuntimeExecutionModel? = nil, item: String? = nil, state: String? = nil, activity: String? = nil, leaseUntil: String? = nil, outcome: String? = nil, reason: String? = nil) {
         self.execution = execution
         self.item = item
         self.state = state
@@ -365,6 +491,17 @@ public struct RuntimeTurnModel: Codable, Sendable, Equatable {
         self.leaseUntil = leaseUntil
         self.outcome = outcome
         self.reason = reason
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        item = try? c.decodeIfPresent(String.self, forKey: .item)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        activity = try? c.decodeIfPresent(String.self, forKey: .activity)
+        leaseUntil = try? c.decodeIfPresent(String.self, forKey: .leaseUntil)
+        outcome = try? c.decodeIfPresent(String.self, forKey: .outcome)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -380,18 +517,18 @@ public struct RuntimeTurnModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_status`.
 public struct RuntimeStatusModel: Codable, Sendable, Equatable {
-    public var target: RuntimeWorkerModel
-    public var engineRunning: Bool
-    public var capabilities: RuntimeCapabilitiesModel
+    public var target: RuntimeWorkerModel?
+    public var engineRunning: Bool?
+    public var capabilities: RuntimeCapabilitiesModel?
     public var item: String?
     public var owner: String?
     public var expected: String?
     public var handover: String?
     public var mode: String?
     public var cannotRun: String?
-    public var turns: [RuntimeTurnModel]
+    public var turns: [RuntimeTurnModel]?
 
-    public init(target: RuntimeWorkerModel, engineRunning: Bool, capabilities: RuntimeCapabilitiesModel, item: String? = nil, owner: String? = nil, expected: String? = nil, handover: String? = nil, mode: String? = nil, cannotRun: String? = nil, turns: [RuntimeTurnModel]) {
+    public init(target: RuntimeWorkerModel? = nil, engineRunning: Bool? = nil, capabilities: RuntimeCapabilitiesModel? = nil, item: String? = nil, owner: String? = nil, expected: String? = nil, handover: String? = nil, mode: String? = nil, cannotRun: String? = nil, turns: [RuntimeTurnModel]? = nil) {
         self.target = target
         self.engineRunning = engineRunning
         self.capabilities = capabilities
@@ -402,6 +539,20 @@ public struct RuntimeStatusModel: Codable, Sendable, Equatable {
         self.mode = mode
         self.cannotRun = cannotRun
         self.turns = turns
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        target = try? c.decodeIfPresent(RuntimeWorkerModel.self, forKey: .target)
+        engineRunning = try? c.decodeIfPresent(Bool.self, forKey: .engineRunning)
+        capabilities = try? c.decodeIfPresent(RuntimeCapabilitiesModel.self, forKey: .capabilities)
+        item = try? c.decodeIfPresent(String.self, forKey: .item)
+        owner = try? c.decodeIfPresent(String.self, forKey: .owner)
+        expected = try? c.decodeIfPresent(String.self, forKey: .expected)
+        handover = try? c.decodeIfPresent(String.self, forKey: .handover)
+        mode = try? c.decodeIfPresent(String.self, forKey: .mode)
+        cannotRun = try? c.decodeIfPresent(String.self, forKey: .cannotRun)
+        turns = try? c.decodeIfPresent([RuntimeTurnModel].self, forKey: .turns)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -420,14 +571,21 @@ public struct RuntimeStatusModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_error`.
 public struct RuntimeErrorModel: Codable, Sendable, Equatable {
-    public var code: String
-    public var message: String
-    public var retryable: Bool
+    public var code: String?
+    public var message: String?
+    public var retryable: Bool?
 
-    public init(code: String, message: String, retryable: Bool) {
+    public init(code: String? = nil, message: String? = nil, retryable: Bool? = nil) {
         self.code = code
         self.message = message
         self.retryable = retryable
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        code = try? c.decodeIfPresent(String.self, forKey: .code)
+        message = try? c.decodeIfPresent(String.self, forKey: .message)
+        retryable = try? c.decodeIfPresent(Bool.self, forKey: .retryable)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -439,12 +597,18 @@ public struct RuntimeErrorModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_attachment_options`.
 public struct RuntimeAttachmentOptionsModel: Codable, Sendable, Equatable {
-    public var turn: String
-    public var attempt: String
+    public var turn: String?
+    public var attempt: String?
 
-    public init(turn: String, attempt: String) {
+    public init(turn: String? = nil, attempt: String? = nil) {
         self.turn = turn
         self.attempt = attempt
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        turn = try? c.decodeIfPresent(String.self, forKey: .turn)
+        attempt = try? c.decodeIfPresent(String.self, forKey: .attempt)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -455,18 +619,27 @@ public struct RuntimeAttachmentOptionsModel: Codable, Sendable, Equatable {
 
 /// The model `runtime_attachment_capabilities`.
 public struct RuntimeAttachmentCapabilitiesModel: Codable, Sendable, Equatable {
-    public var snapshot: Bool
-    public var control: Bool
-    public var guidance: Bool
-    public var output: Bool
-    public var replay: Bool
+    public var snapshot: Bool?
+    public var control: Bool?
+    public var guidance: Bool?
+    public var output: Bool?
+    public var replay: Bool?
 
-    public init(snapshot: Bool, control: Bool, guidance: Bool, output: Bool, replay: Bool) {
+    public init(snapshot: Bool? = nil, control: Bool? = nil, guidance: Bool? = nil, output: Bool? = nil, replay: Bool? = nil) {
         self.snapshot = snapshot
         self.control = control
         self.guidance = guidance
         self.output = output
         self.replay = replay
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        snapshot = try? c.decodeIfPresent(Bool.self, forKey: .snapshot)
+        control = try? c.decodeIfPresent(Bool.self, forKey: .control)
+        guidance = try? c.decodeIfPresent(Bool.self, forKey: .guidance)
+        output = try? c.decodeIfPresent(Bool.self, forKey: .output)
+        replay = try? c.decodeIfPresent(Bool.self, forKey: .replay)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -480,16 +653,16 @@ public struct RuntimeAttachmentCapabilitiesModel: Codable, Sendable, Equatable {
 
 /// The model `worker_descriptor`.
 public struct WorkerDescriptorModel: Codable, Sendable, Equatable {
-    public var harness: String
-    public var harnessVersion: String
-    public var configuredModel: String
+    public var harness: String?
+    public var harnessVersion: String?
+    public var configuredModel: String?
     public var reportedModel: String?
-    public var capabilityVersion: String
-    public var queuedInput: Bool
-    public var durableAcceptQuery: Bool
-    public var consumptionEvidence: Bool
+    public var capabilityVersion: String?
+    public var queuedInput: Bool?
+    public var durableAcceptQuery: Bool?
+    public var consumptionEvidence: Bool?
 
-    public init(harness: String, harnessVersion: String, configuredModel: String, reportedModel: String? = nil, capabilityVersion: String, queuedInput: Bool, durableAcceptQuery: Bool, consumptionEvidence: Bool) {
+    public init(harness: String? = nil, harnessVersion: String? = nil, configuredModel: String? = nil, reportedModel: String? = nil, capabilityVersion: String? = nil, queuedInput: Bool? = nil, durableAcceptQuery: Bool? = nil, consumptionEvidence: Bool? = nil) {
         self.harness = harness
         self.harnessVersion = harnessVersion
         self.configuredModel = configuredModel
@@ -498,6 +671,18 @@ public struct WorkerDescriptorModel: Codable, Sendable, Equatable {
         self.queuedInput = queuedInput
         self.durableAcceptQuery = durableAcceptQuery
         self.consumptionEvidence = consumptionEvidence
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        harness = try? c.decodeIfPresent(String.self, forKey: .harness)
+        harnessVersion = try? c.decodeIfPresent(String.self, forKey: .harnessVersion)
+        configuredModel = try? c.decodeIfPresent(String.self, forKey: .configuredModel)
+        reportedModel = try? c.decodeIfPresent(String.self, forKey: .reportedModel)
+        capabilityVersion = try? c.decodeIfPresent(String.self, forKey: .capabilityVersion)
+        queuedInput = try? c.decodeIfPresent(Bool.self, forKey: .queuedInput)
+        durableAcceptQuery = try? c.decodeIfPresent(Bool.self, forKey: .durableAcceptQuery)
+        consumptionEvidence = try? c.decodeIfPresent(Bool.self, forKey: .consumptionEvidence)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -514,12 +699,18 @@ public struct WorkerDescriptorModel: Codable, Sendable, Equatable {
 
 /// The model `worker_guidance_availability`.
 public struct WorkerGuidanceAvailabilityModel: Codable, Sendable, Equatable {
-    public var available: Bool
+    public var available: Bool?
     public var reason: String?
 
-    public init(available: Bool, reason: String? = nil) {
+    public init(available: Bool? = nil, reason: String? = nil) {
         self.available = available
         self.reason = reason
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        available = try? c.decodeIfPresent(Bool.self, forKey: .available)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -530,14 +721,21 @@ public struct WorkerGuidanceAvailabilityModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_availability`.
 public struct WorkerOutputAvailabilityModel: Codable, Sendable, Equatable {
-    public var available: Bool
-    public var replay: Bool
+    public var available: Bool?
+    public var replay: Bool?
     public var reason: String?
 
-    public init(available: Bool, replay: Bool, reason: String? = nil) {
+    public init(available: Bool? = nil, replay: Bool? = nil, reason: String? = nil) {
         self.available = available
         self.replay = replay
         self.reason = reason
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        available = try? c.decodeIfPresent(Bool.self, forKey: .available)
+        replay = try? c.decodeIfPresent(Bool.self, forKey: .replay)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -549,22 +747,22 @@ public struct WorkerOutputAvailabilityModel: Codable, Sendable, Equatable {
 
 /// The model `worker_view`.
 public struct WorkerViewModel: Codable, Sendable, Equatable {
-    public var execution: RuntimeExecutionModel
-    public var descriptor: WorkerDescriptorModel
+    public var execution: RuntimeExecutionModel?
+    public var descriptor: WorkerDescriptorModel?
     public var item: String?
     public var itemTitle: String?
     public var itemTo: String?
-    public var state: String
+    public var state: String?
     public var reason: String?
     public var activity: String?
     public var activityAt: String?
     public var leaseUntil: String?
     public var outcome: String?
-    public var confirmedAt: String
-    public var guidance: WorkerGuidanceAvailabilityModel
+    public var confirmedAt: String?
+    public var guidance: WorkerGuidanceAvailabilityModel?
     public var output: WorkerOutputAvailabilityModel?
 
-    public init(execution: RuntimeExecutionModel, descriptor: WorkerDescriptorModel, item: String? = nil, itemTitle: String? = nil, itemTo: String? = nil, state: String, reason: String? = nil, activity: String? = nil, activityAt: String? = nil, leaseUntil: String? = nil, outcome: String? = nil, confirmedAt: String, guidance: WorkerGuidanceAvailabilityModel, output: WorkerOutputAvailabilityModel? = nil) {
+    public init(execution: RuntimeExecutionModel? = nil, descriptor: WorkerDescriptorModel? = nil, item: String? = nil, itemTitle: String? = nil, itemTo: String? = nil, state: String? = nil, reason: String? = nil, activity: String? = nil, activityAt: String? = nil, leaseUntil: String? = nil, outcome: String? = nil, confirmedAt: String? = nil, guidance: WorkerGuidanceAvailabilityModel? = nil, output: WorkerOutputAvailabilityModel? = nil) {
         self.execution = execution
         self.descriptor = descriptor
         self.item = item
@@ -579,6 +777,24 @@ public struct WorkerViewModel: Codable, Sendable, Equatable {
         self.confirmedAt = confirmedAt
         self.guidance = guidance
         self.output = output
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        descriptor = try? c.decodeIfPresent(WorkerDescriptorModel.self, forKey: .descriptor)
+        item = try? c.decodeIfPresent(String.self, forKey: .item)
+        itemTitle = try? c.decodeIfPresent(String.self, forKey: .itemTitle)
+        itemTo = try? c.decodeIfPresent(String.self, forKey: .itemTo)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
+        activity = try? c.decodeIfPresent(String.self, forKey: .activity)
+        activityAt = try? c.decodeIfPresent(String.self, forKey: .activityAt)
+        leaseUntil = try? c.decodeIfPresent(String.self, forKey: .leaseUntil)
+        outcome = try? c.decodeIfPresent(String.self, forKey: .outcome)
+        confirmedAt = try? c.decodeIfPresent(String.self, forKey: .confirmedAt)
+        guidance = try? c.decodeIfPresent(WorkerGuidanceAvailabilityModel.self, forKey: .guidance)
+        output = try? c.decodeIfPresent(WorkerOutputAvailabilityModel.self, forKey: .output)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -601,14 +817,21 @@ public struct WorkerViewModel: Codable, Sendable, Equatable {
 
 /// The model `worker_guidance_input`.
 public struct WorkerGuidanceInputModel: Codable, Sendable, Equatable {
-    public var clientKey: String
-    public var body: String
-    public var cause: String
+    public var clientKey: String?
+    public var body: String?
+    public var cause: String?
 
-    public init(clientKey: String, body: String, cause: String) {
+    public init(clientKey: String? = nil, body: String? = nil, cause: String? = nil) {
         self.clientKey = clientKey
         self.body = body
         self.cause = cause
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        clientKey = try? c.decodeIfPresent(String.self, forKey: .clientKey)
+        body = try? c.decodeIfPresent(String.self, forKey: .body)
+        cause = try? c.decodeIfPresent(String.self, forKey: .cause)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -620,14 +843,21 @@ public struct WorkerGuidanceInputModel: Codable, Sendable, Equatable {
 
 /// The model `worker_receipt_projection`.
 public struct WorkerReceiptProjectionModel: Codable, Sendable, Equatable {
-    public var proven: String
-    public var uncertain: Bool
-    public var closures: [String]
+    public var proven: String?
+    public var uncertain: Bool?
+    public var closures: [String]?
 
-    public init(proven: String, uncertain: Bool, closures: [String]) {
+    public init(proven: String? = nil, uncertain: Bool? = nil, closures: [String]? = nil) {
         self.proven = proven
         self.uncertain = uncertain
         self.closures = closures
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        proven = try? c.decodeIfPresent(String.self, forKey: .proven)
+        uncertain = try? c.decodeIfPresent(Bool.self, forKey: .uncertain)
+        closures = try? c.decodeIfPresent([String].self, forKey: .closures)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -639,24 +869,24 @@ public struct WorkerReceiptProjectionModel: Codable, Sendable, Equatable {
 
 /// The model `worker_interaction`.
 public struct WorkerInteractionModel: Codable, Sendable, Equatable {
-    public var key: String
-    public var environment: String
-    public var actor: String
-    public var clientKey: String
-    public var body: String
-    public var bodyDigest: String
-    public var worker: String
-    public var turn: String
-    public var attempt: String
-    public var mode: String
-    public var execution: String
-    public var cause: String
-    public var recordedAt: String
-    public var recordedPosition: Int
-    public var projection: WorkerReceiptProjectionModel
-    public var receiptCount: Int
+    public var key: String?
+    public var environment: String?
+    public var actor: String?
+    public var clientKey: String?
+    public var body: String?
+    public var bodyDigest: String?
+    public var worker: String?
+    public var turn: String?
+    public var attempt: String?
+    public var mode: String?
+    public var execution: String?
+    public var cause: String?
+    public var recordedAt: String?
+    public var recordedPosition: Int?
+    public var projection: WorkerReceiptProjectionModel?
+    public var receiptCount: Int?
 
-    public init(key: String, environment: String, actor: String, clientKey: String, body: String, bodyDigest: String, worker: String, turn: String, attempt: String, mode: String, execution: String, cause: String, recordedAt: String, recordedPosition: Int, projection: WorkerReceiptProjectionModel, receiptCount: Int) {
+    public init(key: String? = nil, environment: String? = nil, actor: String? = nil, clientKey: String? = nil, body: String? = nil, bodyDigest: String? = nil, worker: String? = nil, turn: String? = nil, attempt: String? = nil, mode: String? = nil, execution: String? = nil, cause: String? = nil, recordedAt: String? = nil, recordedPosition: Int? = nil, projection: WorkerReceiptProjectionModel? = nil, receiptCount: Int? = nil) {
         self.key = key
         self.environment = environment
         self.actor = actor
@@ -673,6 +903,26 @@ public struct WorkerInteractionModel: Codable, Sendable, Equatable {
         self.recordedPosition = recordedPosition
         self.projection = projection
         self.receiptCount = receiptCount
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        environment = try? c.decodeIfPresent(String.self, forKey: .environment)
+        actor = try? c.decodeIfPresent(String.self, forKey: .actor)
+        clientKey = try? c.decodeIfPresent(String.self, forKey: .clientKey)
+        body = try? c.decodeIfPresent(String.self, forKey: .body)
+        bodyDigest = try? c.decodeIfPresent(String.self, forKey: .bodyDigest)
+        worker = try? c.decodeIfPresent(String.self, forKey: .worker)
+        turn = try? c.decodeIfPresent(String.self, forKey: .turn)
+        attempt = try? c.decodeIfPresent(String.self, forKey: .attempt)
+        mode = try? c.decodeIfPresent(String.self, forKey: .mode)
+        execution = try? c.decodeIfPresent(String.self, forKey: .execution)
+        cause = try? c.decodeIfPresent(String.self, forKey: .cause)
+        recordedAt = try? c.decodeIfPresent(String.self, forKey: .recordedAt)
+        recordedPosition = try? c.decodeIfPresent(Int.self, forKey: .recordedPosition)
+        projection = try? c.decodeIfPresent(WorkerReceiptProjectionModel.self, forKey: .projection)
+        receiptCount = try? c.decodeIfPresent(Int.self, forKey: .receiptCount)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -697,24 +947,24 @@ public struct WorkerInteractionModel: Codable, Sendable, Equatable {
 
 /// The model `worker_receipt`.
 public struct WorkerReceiptModel: Codable, Sendable, Equatable {
-    public var key: String
-    public var environment: String
-    public var interaction: String
-    public var worker: String
-    public var turn: String
-    public var attempt: String
-    public var execution: String
-    public var stage: String
-    public var evidenceId: String
-    public var cause: String
-    public var writer: String
-    public var recordedAt: String
-    public var recordedPosition: Int
+    public var key: String?
+    public var environment: String?
+    public var interaction: String?
+    public var worker: String?
+    public var turn: String?
+    public var attempt: String?
+    public var execution: String?
+    public var stage: String?
+    public var evidenceId: String?
+    public var cause: String?
+    public var writer: String?
+    public var recordedAt: String?
+    public var recordedPosition: Int?
     public var admissionId: String?
     public var consumptionId: String?
     public var reason: String?
 
-    public init(key: String, environment: String, interaction: String, worker: String, turn: String, attempt: String, execution: String, stage: String, evidenceId: String, cause: String, writer: String, recordedAt: String, recordedPosition: Int, admissionId: String? = nil, consumptionId: String? = nil, reason: String? = nil) {
+    public init(key: String? = nil, environment: String? = nil, interaction: String? = nil, worker: String? = nil, turn: String? = nil, attempt: String? = nil, execution: String? = nil, stage: String? = nil, evidenceId: String? = nil, cause: String? = nil, writer: String? = nil, recordedAt: String? = nil, recordedPosition: Int? = nil, admissionId: String? = nil, consumptionId: String? = nil, reason: String? = nil) {
         self.key = key
         self.environment = environment
         self.interaction = interaction
@@ -731,6 +981,26 @@ public struct WorkerReceiptModel: Codable, Sendable, Equatable {
         self.admissionId = admissionId
         self.consumptionId = consumptionId
         self.reason = reason
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        environment = try? c.decodeIfPresent(String.self, forKey: .environment)
+        interaction = try? c.decodeIfPresent(String.self, forKey: .interaction)
+        worker = try? c.decodeIfPresent(String.self, forKey: .worker)
+        turn = try? c.decodeIfPresent(String.self, forKey: .turn)
+        attempt = try? c.decodeIfPresent(String.self, forKey: .attempt)
+        execution = try? c.decodeIfPresent(String.self, forKey: .execution)
+        stage = try? c.decodeIfPresent(String.self, forKey: .stage)
+        evidenceId = try? c.decodeIfPresent(String.self, forKey: .evidenceId)
+        cause = try? c.decodeIfPresent(String.self, forKey: .cause)
+        writer = try? c.decodeIfPresent(String.self, forKey: .writer)
+        recordedAt = try? c.decodeIfPresent(String.self, forKey: .recordedAt)
+        recordedPosition = try? c.decodeIfPresent(Int.self, forKey: .recordedPosition)
+        admissionId = try? c.decodeIfPresent(String.self, forKey: .admissionId)
+        consumptionId = try? c.decodeIfPresent(String.self, forKey: .consumptionId)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -755,12 +1025,18 @@ public struct WorkerReceiptModel: Codable, Sendable, Equatable {
 
 /// The model `worker_error`.
 public struct WorkerErrorModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var error: RuntimeErrorModel
+    public var id: String?
+    public var error: RuntimeErrorModel?
 
-    public init(id: String, error: RuntimeErrorModel) {
+    public init(id: String? = nil, error: RuntimeErrorModel? = nil) {
         self.id = id
         self.error = error
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -771,12 +1047,18 @@ public struct WorkerErrorModel: Codable, Sendable, Equatable {
 
 /// The model `worker_inspect_request`.
 public struct WorkerInspectRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
 
-    public init(id: String, execution: RuntimeExecutionModel) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil) {
         self.id = id
         self.execution = execution
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -787,12 +1069,18 @@ public struct WorkerInspectRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_inspect_result`.
 public struct WorkerInspectResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var view: WorkerViewModel
+    public var id: String?
+    public var view: WorkerViewModel?
 
-    public init(id: String, view: WorkerViewModel) {
+    public init(id: String? = nil, view: WorkerViewModel? = nil) {
         self.id = id
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -803,14 +1091,21 @@ public struct WorkerInspectResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_submit_request`.
 public struct WorkerSubmitRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
-    public var guidance: WorkerGuidanceInputModel
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
+    public var guidance: WorkerGuidanceInputModel?
 
-    public init(id: String, execution: RuntimeExecutionModel, guidance: WorkerGuidanceInputModel) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil, guidance: WorkerGuidanceInputModel? = nil) {
         self.id = id
         self.execution = execution
         self.guidance = guidance
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        guidance = try? c.decodeIfPresent(WorkerGuidanceInputModel.self, forKey: .guidance)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -822,12 +1117,18 @@ public struct WorkerSubmitRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_submit_result`.
 public struct WorkerSubmitResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var interaction: WorkerInteractionModel
+    public var id: String?
+    public var interaction: WorkerInteractionModel?
 
-    public init(id: String, interaction: WorkerInteractionModel) {
+    public init(id: String? = nil, interaction: WorkerInteractionModel? = nil) {
         self.id = id
         self.interaction = interaction
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        interaction = try? c.decodeIfPresent(WorkerInteractionModel.self, forKey: .interaction)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -838,14 +1139,21 @@ public struct WorkerSubmitResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_query_request`.
 public struct WorkerQueryRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
-    public var clientKey: String
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
+    public var clientKey: String?
 
-    public init(id: String, execution: RuntimeExecutionModel, clientKey: String) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil, clientKey: String? = nil) {
         self.id = id
         self.execution = execution
         self.clientKey = clientKey
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        clientKey = try? c.decodeIfPresent(String.self, forKey: .clientKey)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -857,14 +1165,21 @@ public struct WorkerQueryRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_query_result`.
 public struct WorkerQueryResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var found: Bool
+    public var id: String?
+    public var found: Bool?
     public var interaction: WorkerInteractionModel?
 
-    public init(id: String, found: Bool, interaction: WorkerInteractionModel? = nil) {
+    public init(id: String? = nil, found: Bool? = nil, interaction: WorkerInteractionModel? = nil) {
         self.id = id
         self.found = found
         self.interaction = interaction
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        found = try? c.decodeIfPresent(Bool.self, forKey: .found)
+        interaction = try? c.decodeIfPresent(WorkerInteractionModel.self, forKey: .interaction)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -876,14 +1191,21 @@ public struct WorkerQueryResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_history_request`.
 public struct WorkerHistoryRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
     public var cursor: String?
 
-    public init(id: String, execution: RuntimeExecutionModel, cursor: String? = nil) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil, cursor: String? = nil) {
         self.id = id
         self.execution = execution
         self.cursor = cursor
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -895,16 +1217,24 @@ public struct WorkerHistoryRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_history_result`.
 public struct WorkerHistoryResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var interactions: [WorkerInteractionModel]
-    public var cursor: String
-    public var more: Bool
+    public var id: String?
+    public var interactions: [WorkerInteractionModel]?
+    public var cursor: String?
+    public var more: Bool?
 
-    public init(id: String, interactions: [WorkerInteractionModel], cursor: String, more: Bool) {
+    public init(id: String? = nil, interactions: [WorkerInteractionModel]? = nil, cursor: String? = nil, more: Bool? = nil) {
         self.id = id
         self.interactions = interactions
         self.cursor = cursor
         self.more = more
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        interactions = try? c.decodeIfPresent([WorkerInteractionModel].self, forKey: .interactions)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -917,16 +1247,24 @@ public struct WorkerHistoryResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_receipts_request`.
 public struct WorkerReceiptsRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
-    public var interaction: String
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
+    public var interaction: String?
     public var cursor: String?
 
-    public init(id: String, execution: RuntimeExecutionModel, interaction: String, cursor: String? = nil) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil, interaction: String? = nil, cursor: String? = nil) {
         self.id = id
         self.execution = execution
         self.interaction = interaction
         self.cursor = cursor
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        interaction = try? c.decodeIfPresent(String.self, forKey: .interaction)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -939,16 +1277,24 @@ public struct WorkerReceiptsRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_receipts_result`.
 public struct WorkerReceiptsResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var receipts: [WorkerReceiptModel]
-    public var cursor: String
-    public var more: Bool
+    public var id: String?
+    public var receipts: [WorkerReceiptModel]?
+    public var cursor: String?
+    public var more: Bool?
 
-    public init(id: String, receipts: [WorkerReceiptModel], cursor: String, more: Bool) {
+    public init(id: String? = nil, receipts: [WorkerReceiptModel]? = nil, cursor: String? = nil, more: Bool? = nil) {
         self.id = id
         self.receipts = receipts
         self.cursor = cursor
         self.more = more
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        receipts = try? c.decodeIfPresent([WorkerReceiptModel].self, forKey: .receipts)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -961,16 +1307,24 @@ public struct WorkerReceiptsResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_error`.
 public struct WorkerOutputErrorModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var error: RuntimeErrorModel
+    public var id: String?
+    public var error: RuntimeErrorModel?
     public var view: WorkerViewModel?
     public var reset: RuntimeOutputResetModel?
 
-    public init(id: String, error: RuntimeErrorModel, view: WorkerViewModel? = nil, reset: RuntimeOutputResetModel? = nil) {
+    public init(id: String? = nil, error: RuntimeErrorModel? = nil, view: WorkerViewModel? = nil, reset: RuntimeOutputResetModel? = nil) {
         self.id = id
         self.error = error
         self.view = view
         self.reset = reset
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        error = try? c.decodeIfPresent(RuntimeErrorModel.self, forKey: .error)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -983,14 +1337,21 @@ public struct WorkerOutputErrorModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_subscribe_request`.
 public struct WorkerOutputSubscribeRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var execution: RuntimeExecutionModel
+    public var id: String?
+    public var execution: RuntimeExecutionModel?
     public var cursor: String?
 
-    public init(id: String, execution: RuntimeExecutionModel, cursor: String? = nil) {
+    public init(id: String? = nil, execution: RuntimeExecutionModel? = nil, cursor: String? = nil) {
         self.id = id
         self.execution = execution
         self.cursor = cursor
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1002,20 +1363,30 @@ public struct WorkerOutputSubscribeRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_subscribe_result`.
 public struct WorkerOutputSubscribeResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
-    public var view: WorkerViewModel
-    public var stream: RuntimeOutputStreamModel
-    public var cursor: String
+    public var id: String?
+    public var subscription: String?
+    public var view: WorkerViewModel?
+    public var stream: RuntimeOutputStreamModel?
+    public var cursor: String?
     public var reset: RuntimeOutputResetModel?
 
-    public init(id: String, subscription: String, view: WorkerViewModel, stream: RuntimeOutputStreamModel, cursor: String, reset: RuntimeOutputResetModel? = nil) {
+    public init(id: String? = nil, subscription: String? = nil, view: WorkerViewModel? = nil, stream: RuntimeOutputStreamModel? = nil, cursor: String? = nil, reset: RuntimeOutputResetModel? = nil) {
         self.id = id
         self.subscription = subscription
         self.view = view
         self.stream = stream
         self.cursor = cursor
         self.reset = reset
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
+        stream = try? c.decodeIfPresent(RuntimeOutputStreamModel.self, forKey: .stream)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1030,14 +1401,21 @@ public struct WorkerOutputSubscribeResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_next_request`.
 public struct WorkerOutputNextRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
-    public var cursor: String
+    public var id: String?
+    public var subscription: String?
+    public var cursor: String?
 
-    public init(id: String, subscription: String, cursor: String) {
+    public init(id: String? = nil, subscription: String? = nil, cursor: String? = nil) {
         self.id = id
         self.subscription = subscription
         self.cursor = cursor
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1049,16 +1427,16 @@ public struct WorkerOutputNextRequestModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_next_result`.
 public struct WorkerOutputNextResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
-    public var stream: RuntimeOutputStreamModel
-    public var events: [RuntimeOutputEventModel]
-    public var cursor: String
-    public var more: Bool
+    public var id: String?
+    public var subscription: String?
+    public var stream: RuntimeOutputStreamModel?
+    public var events: [RuntimeOutputEventModel]?
+    public var cursor: String?
+    public var more: Bool?
     public var reset: RuntimeOutputResetModel?
     public var view: WorkerViewModel?
 
-    public init(id: String, subscription: String, stream: RuntimeOutputStreamModel, events: [RuntimeOutputEventModel], cursor: String, more: Bool, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
+    public init(id: String? = nil, subscription: String? = nil, stream: RuntimeOutputStreamModel? = nil, events: [RuntimeOutputEventModel]? = nil, cursor: String? = nil, more: Bool? = nil, reset: RuntimeOutputResetModel? = nil, view: WorkerViewModel? = nil) {
         self.id = id
         self.subscription = subscription
         self.stream = stream
@@ -1067,6 +1445,18 @@ public struct WorkerOutputNextResultModel: Codable, Sendable, Equatable {
         self.more = more
         self.reset = reset
         self.view = view
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
+        stream = try? c.decodeIfPresent(RuntimeOutputStreamModel.self, forKey: .stream)
+        events = try? c.decodeIfPresent([RuntimeOutputEventModel].self, forKey: .events)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        more = try? c.decodeIfPresent(Bool.self, forKey: .more)
+        reset = try? c.decodeIfPresent(RuntimeOutputResetModel.self, forKey: .reset)
+        view = try? c.decodeIfPresent(WorkerViewModel.self, forKey: .view)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1083,12 +1473,18 @@ public struct WorkerOutputNextResultModel: Codable, Sendable, Equatable {
 
 /// The model `worker_output_unsubscribe_request`.
 public struct WorkerOutputUnsubscribeRequestModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
+    public var id: String?
+    public var subscription: String?
 
-    public init(id: String, subscription: String) {
+    public init(id: String? = nil, subscription: String? = nil) {
         self.id = id
         self.subscription = subscription
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1099,12 +1495,18 @@ public struct WorkerOutputUnsubscribeRequestModel: Codable, Sendable, Equatable 
 
 /// The model `worker_output_unsubscribe_result`.
 public struct WorkerOutputUnsubscribeResultModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var subscription: String
+    public var id: String?
+    public var subscription: String?
 
-    public init(id: String, subscription: String) {
+    public init(id: String? = nil, subscription: String? = nil) {
         self.id = id
         self.subscription = subscription
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        subscription = try? c.decodeIfPresent(String.self, forKey: .subscription)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1115,18 +1517,27 @@ public struct WorkerOutputUnsubscribeResultModel: Codable, Sendable, Equatable {
 
 /// The model `action`.
 public struct ActionModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var key: String
-    public var to: String
+    public var label: String?
+    public var key: String?
+    public var to: String?
     public var submitTo: CallModel?
     public var page: Bool?
 
-    public init(label: String, key: String, to: String, submitTo: CallModel? = nil, page: Bool? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.page = page
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
+        page = try? c.decodeIfPresent(Bool.self, forKey: .page)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1140,14 +1551,21 @@ public struct ActionModel: Codable, Sendable, Equatable {
 
 /// The model `instruction_line`.
 public struct InstructionLineModel: Codable, Sendable, Equatable {
-    public var kind: String
+    public var kind: String?
     public var text: String?
     public var parts: [String]?
 
-    public init(kind: String, text: String? = nil, parts: [String]? = nil) {
+    public init(kind: String? = nil, text: String? = nil, parts: [String]? = nil) {
         self.kind = kind
         self.text = text
         self.parts = parts
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        kind = try? c.decodeIfPresent(String.self, forKey: .kind)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        parts = try? c.decodeIfPresent([String].self, forKey: .parts)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1159,12 +1577,18 @@ public struct InstructionLineModel: Codable, Sendable, Equatable {
 
 /// The model `clause`.
 public struct ClauseModel: Codable, Sendable, Equatable {
-    public var text: String
+    public var text: String?
     public var since: String?
 
-    public init(text: String, since: String? = nil) {
+    public init(text: String? = nil, since: String? = nil) {
         self.text = text
         self.since = since
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        since = try? c.decodeIfPresent(String.self, forKey: .since)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1175,16 +1599,24 @@ public struct ClauseModel: Codable, Sendable, Equatable {
 
 /// The model `panel_item`.
 public struct PanelItemModel: Codable, Sendable, Equatable {
-    public var key: String
-    public var label: String
-    public var to: String
+    public var key: String?
+    public var label: String?
+    public var to: String?
     public var details: [PairModel]?
 
-    public init(key: String, label: String, to: String, details: [PairModel]? = nil) {
+    public init(key: String? = nil, label: String? = nil, to: String? = nil, details: [PairModel]? = nil) {
         self.key = key
         self.label = label
         self.to = to
         self.details = details
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        details = try? c.decodeIfPresent([PairModel].self, forKey: .details)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1197,14 +1629,21 @@ public struct PanelItemModel: Codable, Sendable, Equatable {
 
 /// The model `check`.
 public struct CheckModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var state: String
-    public var text: String
+    public var label: String?
+    public var state: String?
+    public var text: String?
 
-    public init(label: String, state: String, text: String) {
+    public init(label: String? = nil, state: String? = nil, text: String? = nil) {
         self.label = label
         self.state = state
         self.text = text
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1216,14 +1655,21 @@ public struct CheckModel: Codable, Sendable, Equatable {
 
 /// The model `box`.
 public struct BoxModel: Codable, Sendable, Equatable {
-    public var title: String
-    public var text: String
+    public var title: String?
+    public var text: String?
     public var tone: String?
 
-    public init(title: String, text: String, tone: String? = nil) {
+    public init(title: String? = nil, text: String? = nil, tone: String? = nil) {
         self.title = title
         self.text = text
         self.tone = tone
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1235,18 +1681,27 @@ public struct BoxModel: Codable, Sendable, Equatable {
 
 /// The model `panel_answer`.
 public struct PanelAnswerModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var key: String
-    public var to: String
+    public var label: String?
+    public var key: String?
+    public var to: String?
     public var submitTo: CallModel?
     public var note: Bool?
 
-    public init(label: String, key: String, to: String, submitTo: CallModel? = nil, note: Bool? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.note = note
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
+        note = try? c.decodeIfPresent(Bool.self, forKey: .note)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1260,14 +1715,21 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
 
 /// The model `link`.
 public struct LinkModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var key: String
-    public var url: String
+    public var label: String?
+    public var key: String?
+    public var url: String?
 
-    public init(label: String, key: String, url: String) {
+    public init(label: String? = nil, key: String? = nil, url: String? = nil) {
         self.label = label
         self.key = key
         self.url = url
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        url = try? c.decodeIfPresent(String.self, forKey: .url)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1280,16 +1742,16 @@ public struct LinkModel: Codable, Sendable, Equatable {
 /// The model `row`.
 public struct RowModel: Codable, Sendable, Equatable {
     public var id: String?
-    public var label: String
+    public var label: String?
     public var detail: String?
-    public var to: String
+    public var to: String?
     public var links: [LinkModel]?
     public var key: String?
     public var pending: Bool?
     public var tone: String?
     public var since: String?
 
-    public init(id: String? = nil, label: String, detail: String? = nil, to: String, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil) {
+    public init(id: String? = nil, label: String? = nil, detail: String? = nil, to: String? = nil, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil) {
         self.id = id
         self.label = label
         self.detail = detail
@@ -1299,6 +1761,19 @@ public struct RowModel: Codable, Sendable, Equatable {
         self.pending = pending
         self.tone = tone
         self.since = since
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        detail = try? c.decodeIfPresent(String.self, forKey: .detail)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        links = try? c.decodeIfPresent([LinkModel].self, forKey: .links)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        pending = try? c.decodeIfPresent(Bool.self, forKey: .pending)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
+        since = try? c.decodeIfPresent(String.self, forKey: .since)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1316,16 +1791,24 @@ public struct RowModel: Codable, Sendable, Equatable {
 
 /// The model `group`.
 public struct GroupModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var count: Int
-    public var to: String
+    public var label: String?
+    public var count: Int?
+    public var to: String?
     public var active: Bool?
 
-    public init(label: String, count: Int, to: String, active: Bool? = nil) {
+    public init(label: String? = nil, count: Int? = nil, to: String? = nil, active: Bool? = nil) {
         self.label = label
         self.count = count
         self.to = to
         self.active = active
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        count = try? c.decodeIfPresent(Int.self, forKey: .count)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        active = try? c.decodeIfPresent(Bool.self, forKey: .active)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1348,6 +1831,13 @@ public struct OriginModel: Codable, Sendable, Equatable {
         self.cause = cause
     }
 
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        since = try? c.decodeIfPresent(String.self, forKey: .since)
+        by = try? c.decodeIfPresent(String.self, forKey: .by)
+        cause = try? c.decodeIfPresent(String.self, forKey: .cause)
+    }
+
     enum CodingKeys: String, CodingKey {
         case since
         case by
@@ -1357,14 +1847,21 @@ public struct OriginModel: Codable, Sendable, Equatable {
 
 /// The model `pair`.
 public struct PairModel: Codable, Sendable, Equatable {
-    public var label: String
+    public var label: String?
     public var value: String?
     public var origin: OriginModel?
 
-    public init(label: String, value: String? = nil, origin: OriginModel? = nil) {
+    public init(label: String? = nil, value: String? = nil, origin: OriginModel? = nil) {
         self.label = label
         self.value = value
         self.origin = origin
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        value = try? c.decodeIfPresent(String.self, forKey: .value)
+        origin = try? c.decodeIfPresent(OriginModel.self, forKey: .origin)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1376,12 +1873,18 @@ public struct PairModel: Codable, Sendable, Equatable {
 
 /// The model `choice`.
 public struct ChoiceModel: Codable, Sendable, Equatable {
-    public var value: String
-    public var label: String
+    public var value: String?
+    public var label: String?
 
-    public init(value: String, label: String) {
+    public init(value: String? = nil, label: String? = nil) {
         self.value = value
         self.label = label
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        value = try? c.decodeIfPresent(String.self, forKey: .value)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1392,15 +1895,15 @@ public struct ChoiceModel: Codable, Sendable, Equatable {
 
 /// The model `input`.
 public struct InputModel: Codable, Sendable, Equatable {
-    public var name: String
-    public var label: String
-    public var kind: String
+    public var name: String?
+    public var label: String?
+    public var kind: String?
     public var value: String?
     public var required: Bool?
     public var hint: String?
     public var choices: [ChoiceModel]?
 
-    public init(name: String, label: String, kind: String, value: String? = nil, required: Bool? = nil, hint: String? = nil, choices: [ChoiceModel]? = nil) {
+    public init(name: String? = nil, label: String? = nil, kind: String? = nil, value: String? = nil, required: Bool? = nil, hint: String? = nil, choices: [ChoiceModel]? = nil) {
         self.name = name
         self.label = label
         self.kind = kind
@@ -1408,6 +1911,17 @@ public struct InputModel: Codable, Sendable, Equatable {
         self.required = required
         self.hint = hint
         self.choices = choices
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        name = try? c.decodeIfPresent(String.self, forKey: .name)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        kind = try? c.decodeIfPresent(String.self, forKey: .kind)
+        value = try? c.decodeIfPresent(String.self, forKey: .value)
+        required = try? c.decodeIfPresent(Bool.self, forKey: .required)
+        hint = try? c.decodeIfPresent(String.self, forKey: .hint)
+        choices = try? c.decodeIfPresent([ChoiceModel].self, forKey: .choices)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1423,12 +1937,18 @@ public struct InputModel: Codable, Sendable, Equatable {
 
 /// The model `call`.
 public struct CallModel: Codable, Sendable, Equatable {
-    public var endpoint: String
+    public var endpoint: String?
     public var params: [String: String]?
 
-    public init(endpoint: String, params: [String: String]? = nil) {
+    public init(endpoint: String? = nil, params: [String: String]? = nil) {
         self.endpoint = endpoint
         self.params = params
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        endpoint = try? c.decodeIfPresent(String.self, forKey: .endpoint)
+        params = try? c.decodeIfPresent([String: String].self, forKey: .params)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1439,20 +1959,30 @@ public struct CallModel: Codable, Sendable, Equatable {
 
 /// The model `step`.
 public struct StepModel: Codable, Sendable, Equatable {
-    public var n: Int
-    public var label: String
-    public var state: String
+    public var n: Int?
+    public var label: String?
+    public var state: String?
     public var why: String?
     public var detail: String?
     public var inputs: [InputModel]?
 
-    public init(n: Int, label: String, state: String, why: String? = nil, detail: String? = nil, inputs: [InputModel]? = nil) {
+    public init(n: Int? = nil, label: String? = nil, state: String? = nil, why: String? = nil, detail: String? = nil, inputs: [InputModel]? = nil) {
         self.n = n
         self.label = label
         self.state = state
         self.why = why
         self.detail = detail
         self.inputs = inputs
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        n = try? c.decodeIfPresent(Int.self, forKey: .n)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        state = try? c.decodeIfPresent(String.self, forKey: .state)
+        why = try? c.decodeIfPresent(String.self, forKey: .why)
+        detail = try? c.decodeIfPresent(String.self, forKey: .detail)
+        inputs = try? c.decodeIfPresent([InputModel].self, forKey: .inputs)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1467,7 +1997,7 @@ public struct StepModel: Codable, Sendable, Equatable {
 
 /// The model `console_operation`.
 public struct ConsoleOperationModel: Codable, Sendable, Equatable {
-    public var name: String
+    public var name: String?
     public var to: String?
     public var url: String?
     public var intent: String?
@@ -1476,7 +2006,7 @@ public struct ConsoleOperationModel: Codable, Sendable, Equatable {
     public var interactionSource: String?
     public var call: CallModel?
 
-    public init(name: String, to: String? = nil, url: String? = nil, intent: String? = nil, execution: RuntimeExecutionModel? = nil, cursor: String? = nil, interactionSource: String? = nil, call: CallModel? = nil) {
+    public init(name: String? = nil, to: String? = nil, url: String? = nil, intent: String? = nil, execution: RuntimeExecutionModel? = nil, cursor: String? = nil, interactionSource: String? = nil, call: CallModel? = nil) {
         self.name = name
         self.to = to
         self.url = url
@@ -1485,6 +2015,18 @@ public struct ConsoleOperationModel: Codable, Sendable, Equatable {
         self.cursor = cursor
         self.interactionSource = interactionSource
         self.call = call
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        name = try? c.decodeIfPresent(String.self, forKey: .name)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        url = try? c.decodeIfPresent(String.self, forKey: .url)
+        intent = try? c.decodeIfPresent(String.self, forKey: .intent)
+        execution = try? c.decodeIfPresent(RuntimeExecutionModel.self, forKey: .execution)
+        cursor = try? c.decodeIfPresent(String.self, forKey: .cursor)
+        interactionSource = try? c.decodeIfPresent(String.self, forKey: .interactionSource)
+        call = try? c.decodeIfPresent(CallModel.self, forKey: .call)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1501,18 +2043,27 @@ public struct ConsoleOperationModel: Codable, Sendable, Equatable {
 
 /// The model `console_scope`.
 public struct ConsoleScopeModel: Codable, Sendable, Equatable {
-    public var page: String
-    public var revision: String
-    public var context: String
+    public var page: String?
+    public var revision: String?
+    public var context: String?
     public var on: String?
     public var row: String?
 
-    public init(page: String, revision: String, context: String, on: String? = nil, row: String? = nil) {
+    public init(page: String? = nil, revision: String? = nil, context: String? = nil, on: String? = nil, row: String? = nil) {
         self.page = page
         self.revision = revision
         self.context = context
         self.on = on
         self.row = row
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        page = try? c.decodeIfPresent(String.self, forKey: .page)
+        revision = try? c.decodeIfPresent(String.self, forKey: .revision)
+        context = try? c.decodeIfPresent(String.self, forKey: .context)
+        on = try? c.decodeIfPresent(String.self, forKey: .on)
+        row = try? c.decodeIfPresent(String.self, forKey: .row)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1526,16 +2077,16 @@ public struct ConsoleScopeModel: Codable, Sendable, Equatable {
 
 /// The model `shell_tab`.
 public struct ShellTabModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var label: String
-    public var to: String
-    public var section: String
+    public var id: String?
+    public var label: String?
+    public var to: String?
+    public var section: String?
     public var key: String?
     public var icon: String?
     public var groups: [ShellGroupModel]?
     public var count: Int?
 
-    public init(id: String, label: String, to: String, section: String, key: String? = nil, icon: String? = nil, groups: [ShellGroupModel]? = nil, count: Int? = nil) {
+    public init(id: String? = nil, label: String? = nil, to: String? = nil, section: String? = nil, key: String? = nil, icon: String? = nil, groups: [ShellGroupModel]? = nil, count: Int? = nil) {
         self.id = id
         self.label = label
         self.to = to
@@ -1544,6 +2095,18 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         self.icon = icon
         self.groups = groups
         self.count = count
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? c.decodeIfPresent(String.self, forKey: .id)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        section = try? c.decodeIfPresent(String.self, forKey: .section)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
+        groups = try? c.decodeIfPresent([ShellGroupModel].self, forKey: .groups)
+        count = try? c.decodeIfPresent(Int.self, forKey: .count)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1560,14 +2123,21 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
 
 /// The model `shell_group`.
 public struct ShellGroupModel: Codable, Sendable, Equatable {
-    public var label: String
-    public var to: String
+    public var label: String?
+    public var to: String?
     public var count: Int?
 
-    public init(label: String, to: String, count: Int? = nil) {
+    public init(label: String? = nil, to: String? = nil, count: Int? = nil) {
         self.label = label
         self.to = to
         self.count = count
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        label = try? c.decodeIfPresent(String.self, forKey: .label)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+        count = try? c.decodeIfPresent(Int.self, forKey: .count)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1585,6 +2155,11 @@ public struct BootRequestModel: Codable, Sendable, Equatable {
         self.to = to
     }
 
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        to = try? c.decodeIfPresent(String.self, forKey: .to)
+    }
+
     enum CodingKeys: String, CodingKey {
         case to
     }
@@ -1592,16 +2167,16 @@ public struct BootRequestModel: Codable, Sendable, Equatable {
 
 /// The model `shell`.
 public struct ShellModel: Codable, Sendable, Equatable {
-    public var title: String
-    public var env: String
-    public var spec: String
-    public var revision: String
-    public var tabs: [ShellTabModel]
-    public var initialTo: String
+    public var title: String?
+    public var env: String?
+    public var spec: String?
+    public var revision: String?
+    public var tabs: [ShellTabModel]?
+    public var initialTo: String?
     public var activeTab: String?
     public var greeting: String?
 
-    public init(title: String, env: String, spec: String, revision: String, tabs: [ShellTabModel], initialTo: String, activeTab: String? = nil, greeting: String? = nil) {
+    public init(title: String? = nil, env: String? = nil, spec: String? = nil, revision: String? = nil, tabs: [ShellTabModel]? = nil, initialTo: String? = nil, activeTab: String? = nil, greeting: String? = nil) {
         self.title = title
         self.env = env
         self.spec = spec
@@ -1610,6 +2185,18 @@ public struct ShellModel: Codable, Sendable, Equatable {
         self.initialTo = initialTo
         self.activeTab = activeTab
         self.greeting = greeting
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        title = try? c.decodeIfPresent(String.self, forKey: .title)
+        env = try? c.decodeIfPresent(String.self, forKey: .env)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
+        revision = try? c.decodeIfPresent(String.self, forKey: .revision)
+        tabs = try? c.decodeIfPresent([ShellTabModel].self, forKey: .tabs)
+        initialTo = try? c.decodeIfPresent(String.self, forKey: .initialTo)
+        activeTab = try? c.decodeIfPresent(String.self, forKey: .activeTab)
+        greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1626,10 +2213,15 @@ public struct ShellModel: Codable, Sendable, Equatable {
 
 /// The model `boot_error`.
 public struct BootErrorModel: Codable, Sendable, Equatable {
-    public var error: String
+    public var error: String?
 
-    public init(error: String) {
+    public init(error: String? = nil) {
         self.error = error
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error = try? c.decodeIfPresent(String.self, forKey: .error)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1640,17 +2232,26 @@ public struct BootErrorModel: Codable, Sendable, Equatable {
 /// The model `hello`.
 public struct HelloModel: Codable, Sendable, Equatable {
     public var surface: String?
-    public var env: String
-    public var client: String
-    public var spec: String
+    public var env: String?
+    public var client: String?
+    public var spec: String?
     public var `as`: String?
 
-    public init(surface: String? = nil, env: String, client: String, spec: String, `as`: String? = nil) {
+    public init(surface: String? = nil, env: String? = nil, client: String? = nil, spec: String? = nil, `as`: String? = nil) {
         self.surface = surface
         self.env = env
         self.client = client
         self.spec = spec
         self.`as` = `as`
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        surface = try? c.decodeIfPresent(String.self, forKey: .surface)
+        env = try? c.decodeIfPresent(String.self, forKey: .env)
+        client = try? c.decodeIfPresent(String.self, forKey: .client)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
+        `as` = try? c.decodeIfPresent(String.self, forKey: .`as`)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1665,13 +2266,20 @@ public struct HelloModel: Codable, Sendable, Equatable {
 /// The model `welcome`.
 public struct WelcomeModel: Codable, Sendable, Equatable {
     public var surface: String?
-    public var env: String
-    public var spec: String
+    public var env: String?
+    public var spec: String?
 
-    public init(surface: String? = nil, env: String, spec: String) {
+    public init(surface: String? = nil, env: String? = nil, spec: String? = nil) {
         self.surface = surface
         self.env = env
         self.spec = spec
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        surface = try? c.decodeIfPresent(String.self, forKey: .surface)
+        env = try? c.decodeIfPresent(String.self, forKey: .env)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1683,14 +2291,21 @@ public struct WelcomeModel: Codable, Sendable, Equatable {
 
 /// The model `bye`.
 public struct ByeModel: Codable, Sendable, Equatable {
-    public var text: String
+    public var text: String?
     public var reason: String?
     public var spec: String?
 
-    public init(text: String, reason: String? = nil, spec: String? = nil) {
+    public init(text: String? = nil, reason: String? = nil, spec: String? = nil) {
         self.text = text
         self.reason = reason
         self.spec = spec
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        reason = try? c.decodeIfPresent(String.self, forKey: .reason)
+        spec = try? c.decodeIfPresent(String.self, forKey: .spec)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1702,14 +2317,21 @@ public struct ByeModel: Codable, Sendable, Equatable {
 
 /// The model `notice`.
 public struct NoticeModel: Codable, Sendable, Equatable {
-    public var tone: String
-    public var text: String
+    public var tone: String?
+    public var text: String?
     public var at: String?
 
-    public init(tone: String, text: String, at: String? = nil) {
+    public init(tone: String? = nil, text: String? = nil, at: String? = nil) {
         self.tone = tone
         self.text = text
         self.at = at
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        tone = try? c.decodeIfPresent(String.self, forKey: .tone)
+        text = try? c.decodeIfPresent(String.self, forKey: .text)
+        at = try? c.decodeIfPresent(String.self, forKey: .at)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1731,6 +2353,13 @@ public struct TurnContextModel: Codable, Sendable, Equatable {
         self.error = error
     }
 
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        on = try? c.decodeIfPresent(String.self, forKey: .on)
+        error = try? c.decodeIfPresent(String.self, forKey: .error)
+    }
+
     enum CodingKeys: String, CodingKey {
         case key
         case on
@@ -1740,12 +2369,18 @@ public struct TurnContextModel: Codable, Sendable, Equatable {
 
 /// The model `turn_outcome`.
 public struct TurnOutcomeModel: Codable, Sendable, Equatable {
-    public var key: String
-    public var outcome: String
+    public var key: String?
+    public var outcome: String?
 
-    public init(key: String, outcome: String) {
+    public init(key: String? = nil, outcome: String? = nil) {
         self.key = key
         self.outcome = outcome
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        key = try? c.decodeIfPresent(String.self, forKey: .key)
+        outcome = try? c.decodeIfPresent(String.self, forKey: .outcome)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1756,14 +2391,21 @@ public struct TurnOutcomeModel: Codable, Sendable, Equatable {
 
 /// The model `ask`.
 public struct AskModel: Codable, Sendable, Equatable {
-    public var request: String
-    public var on: String
+    public var request: String?
+    public var on: String?
     public var intent: String?
 
-    public init(request: String, on: String, intent: String? = nil) {
+    public init(request: String? = nil, on: String? = nil, intent: String? = nil) {
         self.request = request
         self.on = on
         self.intent = intent
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        request = try? c.decodeIfPresent(String.self, forKey: .request)
+        on = try? c.decodeIfPresent(String.self, forKey: .on)
+        intent = try? c.decodeIfPresent(String.self, forKey: .intent)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1775,12 +2417,18 @@ public struct AskModel: Codable, Sendable, Equatable {
 
 /// The model `run_step`.
 public struct RunStepModel: Codable, Sendable, Equatable {
-    public var n: Int
+    public var n: Int?
     public var values: [String: String]?
 
-    public init(n: Int, values: [String: String]? = nil) {
+    public init(n: Int? = nil, values: [String: String]? = nil) {
         self.n = n
         self.values = values
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        n = try? c.decodeIfPresent(Int.self, forKey: .n)
+        values = try? c.decodeIfPresent([String: String].self, forKey: .values)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1791,10 +2439,15 @@ public struct RunStepModel: Codable, Sendable, Equatable {
 
 /// The model `run`.
 public struct RunModel: Codable, Sendable, Equatable {
-    public var steps: [RunStepModel]
+    public var steps: [RunStepModel]?
 
-    public init(steps: [RunStepModel]) {
+    public init(steps: [RunStepModel]? = nil) {
         self.steps = steps
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        steps = try? c.decodeIfPresent([RunStepModel].self, forKey: .steps)
     }
 
     enum CodingKeys: String, CodingKey {
