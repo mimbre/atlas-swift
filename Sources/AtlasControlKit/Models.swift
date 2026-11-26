@@ -1194,6 +1194,113 @@ public struct InstructionStepModel: Codable, Sendable, Equatable {
     }
 }
 
+/// The model `clause`.
+public struct ClauseModel: Codable, Sendable, Equatable {
+    public var text: String
+    public var since: String?
+
+    public init(text: String, since: String? = nil) {
+        self.text = text
+        self.since = since
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case text
+        case since
+    }
+}
+
+/// The model `panel_item`.
+public struct PanelItemModel: Codable, Sendable, Equatable {
+    public var key: String
+    public var label: String
+    public var to: String
+    public var details: [PairModel]?
+
+    public init(key: String, label: String, to: String, details: [PairModel]? = nil) {
+        self.key = key
+        self.label = label
+        self.to = to
+        self.details = details
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case label
+        case to
+        case details
+    }
+}
+
+/// The model `check`.
+public struct CheckModel: Codable, Sendable, Equatable {
+    public var label: String
+    public var state: String
+    public var text: String
+
+    public init(label: String, state: String, text: String) {
+        self.label = label
+        self.state = state
+        self.text = text
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case label
+        case state
+        case text
+    }
+}
+
+/// The model `box`.
+public struct BoxModel: Codable, Sendable, Equatable {
+    public var title: String
+    public var text: String
+    public var tone: String?
+
+    public init(title: String, text: String, tone: String? = nil) {
+        self.title = title
+        self.text = text
+        self.tone = tone
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case title
+        case text
+        case tone
+    }
+}
+
+/// The model `panel_answer`.
+public struct PanelAnswerModel: Codable, Sendable, Equatable {
+    public var label: String
+    public var key: String
+    public var to: String
+    public var submitTo: CallModel?
+    public var note: Bool?
+    public var recommended: Bool?
+    public var detail: String?
+
+    public init(label: String, key: String, to: String, submitTo: CallModel? = nil, note: Bool? = nil, recommended: Bool? = nil, detail: String? = nil) {
+        self.label = label
+        self.key = key
+        self.to = to
+        self.submitTo = submitTo
+        self.note = note
+        self.recommended = recommended
+        self.detail = detail
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case label
+        case key
+        case to
+        case submitTo = "submit_to"
+        case note
+        case recommended
+        case detail
+    }
+}
+
 /// The model `link`.
 public struct LinkModel: Codable, Sendable, Equatable {
     public var label: String

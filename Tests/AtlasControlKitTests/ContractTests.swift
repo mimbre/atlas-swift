@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.27.0")
+        XCTAssertEqual(Contract.version, "0.28.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -130,6 +130,27 @@ final class ContractTests: XCTestCase {
         }
     }
 
+    func test_block_panel_decodes_and_round_trips() throws {
+        for text in [##"{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"answers":[{"detail":"detail 1","key":"key 1","label":"label 1","note":true,"recommended":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"aside":"aside 1","box":{"text":"text 1","title":"title 1","tone":"tone 1"},"byline":[{"since":"since 1","text":"text 1"}],"checks":[{"label":"label 1","state":"state 1","text":"text 1"}],"choose":true,"heading":"heading 1","items":[{"details":[{"label":"label 1","origin":{},"value":"value 1"}],"key":"key 1","label":"label 1","to":"to 1"}],"links":[{"key":"key 1","label":"label 1","url":"url 1"}],"title":"title 1"},"type":"panel"}"##] {
+            let block = try decode(Block.self, text)
+            guard case .panel = block.content else { return XCTFail("panel fell back: \(block.content)") }
+            XCTAssertEqual(block.type, "panel")
+            XCTAssertEqual(block.id, "b1")
+            try assertRoundTrip(block, text)
+        }
+    }
+
+    func test_block_panel_without_heading_or_with_a_wrong_one_falls_back() throws {
+        for (text, reason) in [
+            (##"{"id":"b1","props":{"title":"title 1"},"type":"panel"}"##, Fallback.Reason.missing(path: ["heading"])),
+            (##"{"id":"b1","props":{"heading":1,"title":"title 1"},"type":"panel"}"##, Fallback.Reason.wrongType(path: ["heading"])),
+        ] {
+            let block = try decode(Block.self, text)
+            XCTAssertEqual(block.content, .fallback(Fallback(type: "panel", reason: reason, raw: try json(text))))
+            try assertRoundTrip(block, text)
+        }
+    }
+
     func test_block_form_decodes_and_round_trips() throws {
         for text in [##"{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"}"##, ##"{"id":"b1","props":{"cancel_to":"cancel_to 1","errors":["errors 1"],"inputs":[{"choices":[{"label":"label 1","value":"value 1"}],"hint":"hint 1","kind":"kind 1","label":"label 1","name":"name 1","required":true,"value":"value 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"title":"title 1"},"type":"form"}"##] {
             let block = try decode(Block.self, text)
@@ -227,9 +248,9 @@ final class ContractTests: XCTestCase {
     }
 
     func test_a_list_of_blocks_keeps_every_known_block_around_a_fallback() throws {
-        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":"title 1"},"type":"steps"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
+        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":"title 1"},"type":"steps"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
         let blocks = try decode([Block].self, text)
-        XCTAssertEqual(blocks.count, 18)
+        XCTAssertEqual(blocks.count, 20)
         for (i, block) in blocks.enumerated() {
             if case .fallback(let fallback) = block.content {
                 XCTAssertEqual(i % 2, 1)
