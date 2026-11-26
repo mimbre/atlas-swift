@@ -1175,31 +1175,6 @@ public struct ChoiceOptionModel: Codable, Sendable, Equatable {
     }
 }
 
-/// The model `instruction_step`.
-public struct InstructionStepModel: Codable, Sendable, Equatable {
-    public var n: Int
-    public var text: String
-    public var commands: [String]
-    public var routes: [[String]]
-    public var lines: [InstructionLineModel]
-
-    public init(n: Int, text: String, commands: [String], routes: [[String]], lines: [InstructionLineModel]) {
-        self.n = n
-        self.text = text
-        self.commands = commands
-        self.routes = routes
-        self.lines = lines
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case n
-        case text
-        case commands
-        case routes
-        case lines
-    }
-}
-
 /// The model `instruction_line`.
 public struct InstructionLineModel: Codable, Sendable, Equatable {
     public var kind: String
