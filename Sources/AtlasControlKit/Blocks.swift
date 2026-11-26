@@ -66,14 +66,16 @@ public struct SingleChoiceBlock: Codable, Sendable, Equatable {
     public var rationale: String
     public var revision: String
     public var instructions: String?
+    public var key: String?
 
-    public init(question: String, options: [ChoiceOptionModel], recommended: String, rationale: String, revision: String, instructions: String? = nil) {
+    public init(question: String, options: [ChoiceOptionModel], recommended: String, rationale: String, revision: String, instructions: String? = nil, key: String? = nil) {
         self.question = question
         self.options = options
         self.recommended = recommended
         self.rationale = rationale
         self.revision = revision
         self.instructions = instructions
+        self.key = key
     }
 
     enum CodingKeys: String, CodingKey {
@@ -83,20 +85,23 @@ public struct SingleChoiceBlock: Codable, Sendable, Equatable {
         case rationale
         case revision
         case instructions
+        case key
     }
 }
 
 /// The props of the block `steps`.
 public struct StepsBlock: Codable, Sendable, Equatable {
     public var title: String
+    public var key: String?
     public var why: String?
     public var since: String?
     public var steps: [InstructionStepModel]
     public var current: Int
     public var actions: [ActionModel]?
 
-    public init(title: String, why: String? = nil, since: String? = nil, steps: [InstructionStepModel], current: Int, actions: [ActionModel]? = nil) {
+    public init(title: String, key: String? = nil, why: String? = nil, since: String? = nil, steps: [InstructionStepModel], current: Int, actions: [ActionModel]? = nil) {
         self.title = title
+        self.key = key
         self.why = why
         self.since = since
         self.steps = steps
@@ -106,6 +111,7 @@ public struct StepsBlock: Codable, Sendable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case title
+        case key
         case why
         case since
         case steps
@@ -118,6 +124,7 @@ public struct StepsBlock: Codable, Sendable, Equatable {
 public struct PanelBlock: Codable, Sendable, Equatable {
     public var heading: String
     public var title: String
+    public var key: String?
     public var aside: String?
     public var byline: [ClauseModel]?
     public var items: [PanelItemModel]?
@@ -128,9 +135,10 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     public var actions: [ActionModel]?
     public var links: [LinkModel]?
 
-    public init(heading: String, title: String, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, choose: Bool? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
+    public init(heading: String, title: String, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, choose: Bool? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
         self.heading = heading
         self.title = title
+        self.key = key
         self.aside = aside
         self.byline = byline
         self.items = items
@@ -145,6 +153,7 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     enum CodingKeys: String, CodingKey {
         case heading
         case title
+        case key
         case aside
         case byline
         case items

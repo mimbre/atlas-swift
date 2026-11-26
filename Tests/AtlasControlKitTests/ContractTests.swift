@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.29.0")
+        XCTAssertEqual(Contract.version, "0.30.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -89,7 +89,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_block_single_choice_decodes_and_round_trips() throws {
-        for text in [##"{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"}"##, ##"{"id":"b1","props":{"instructions":"instructions 1","options":[{"answer":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","note":true,"rule":"rule 1","shortcut":"shortcut 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"}"##] {
+        for text in [##"{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"}"##, ##"{"id":"b1","props":{"instructions":"instructions 1","key":"key 1","options":[{"answer":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","note":true,"rule":"rule 1","shortcut":"shortcut 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"}"##] {
             let block = try decode(Block.self, text)
             guard case .singleChoice = block.content else { return XCTFail("single_choice fell back: \(block.content)") }
             XCTAssertEqual(block.type, "single_choice")
@@ -110,7 +110,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_block_steps_decodes_and_round_trips() throws {
-        for text in [##"{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"lines":[{"kind":"kind 1"}],"n":7,"routes":[["routes 1"]],"text":"text 1"}],"title":"title 1"},"type":"steps"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"current":7,"since":"since 1","steps":[{"commands":["commands 1"],"lines":[{"kind":"kind 1","parts":["parts 1"],"text":"text 1"}],"n":7,"routes":[["routes 1"]],"text":"text 1"}],"title":"title 1","why":"why 1"},"type":"steps"}"##] {
+        for text in [##"{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"lines":[{"kind":"kind 1"}],"n":7,"routes":[["routes 1"]],"text":"text 1"}],"title":"title 1"},"type":"steps"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"current":7,"key":"key 1","since":"since 1","steps":[{"commands":["commands 1"],"lines":[{"kind":"kind 1","parts":["parts 1"],"text":"text 1"}],"n":7,"routes":[["routes 1"]],"text":"text 1"}],"title":"title 1","why":"why 1"},"type":"steps"}"##] {
             let block = try decode(Block.self, text)
             guard case .steps = block.content else { return XCTFail("steps fell back: \(block.content)") }
             XCTAssertEqual(block.type, "steps")
@@ -131,7 +131,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_block_panel_decodes_and_round_trips() throws {
-        for text in [##"{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"answers":[{"detail":"detail 1","key":"key 1","label":"label 1","note":true,"recommended":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"aside":"aside 1","box":{"text":"text 1","title":"title 1","tone":"tone 1"},"byline":[{"since":"since 1","text":"text 1"}],"checks":[{"label":"label 1","state":"state 1","text":"text 1"}],"choose":true,"heading":"heading 1","items":[{"details":[{"label":"label 1","origin":{},"value":"value 1"}],"key":"key 1","label":"label 1","to":"to 1"}],"links":[{"key":"key 1","label":"label 1","url":"url 1"}],"title":"title 1"},"type":"panel"}"##] {
+        for text in [##"{"id":"b1","props":{"heading":"heading 1","title":"title 1"},"type":"panel"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"answers":[{"detail":"detail 1","key":"key 1","label":"label 1","note":true,"recommended":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"aside":"aside 1","box":{"text":"text 1","title":"title 1","tone":"tone 1"},"byline":[{"since":"since 1","text":"text 1"}],"checks":[{"label":"label 1","state":"state 1","text":"text 1"}],"choose":true,"heading":"heading 1","items":[{"details":[{"label":"label 1","origin":{},"value":"value 1"}],"key":"key 1","label":"label 1","to":"to 1"}],"key":"key 1","links":[{"key":"key 1","label":"label 1","url":"url 1"}],"title":"title 1"},"type":"panel"}"##] {
             let block = try decode(Block.self, text)
             guard case .panel = block.content else { return XCTFail("panel fell back: \(block.content)") }
             XCTAssertEqual(block.type, "panel")
