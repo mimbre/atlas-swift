@@ -1203,8 +1203,10 @@ public struct RowModel: Codable, Sendable, Equatable {
     public var links: [LinkModel]?
     public var key: String?
     public var pending: Bool?
+    public var tone: String?
+    public var since: String?
 
-    public init(id: String? = nil, label: String, detail: String? = nil, to: String, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil) {
+    public init(id: String? = nil, label: String, detail: String? = nil, to: String, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil) {
         self.id = id
         self.label = label
         self.detail = detail
@@ -1212,6 +1214,8 @@ public struct RowModel: Codable, Sendable, Equatable {
         self.links = links
         self.key = key
         self.pending = pending
+        self.tone = tone
+        self.since = since
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1222,6 +1226,8 @@ public struct RowModel: Codable, Sendable, Equatable {
         case links
         case key
         case pending
+        case tone
+        case since
     }
 }
 
