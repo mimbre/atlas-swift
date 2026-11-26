@@ -723,16 +723,18 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
     public var env: String?
     public var greeting: String?
     public var initialTo: String?
+    public var name: String?
     public var revision: String?
     public var spec: String?
     public var tabs: [ShellTabModel]?
     public var title: String?
 
-    public init(activeTab: String? = nil, env: String? = nil, greeting: String? = nil, initialTo: String? = nil, revision: String? = nil, spec: String? = nil, tabs: [ShellTabModel]? = nil, title: String? = nil) {
+    public init(activeTab: String? = nil, env: String? = nil, greeting: String? = nil, initialTo: String? = nil, name: String? = nil, revision: String? = nil, spec: String? = nil, tabs: [ShellTabModel]? = nil, title: String? = nil) {
         self.activeTab = activeTab
         self.env = env
         self.greeting = greeting
         self.initialTo = initialTo
+        self.name = name
         self.revision = revision
         self.spec = spec
         self.tabs = tabs
@@ -745,6 +747,7 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
         env = try? c.decodeIfPresent(String.self, forKey: .env)
         greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
         initialTo = try? c.decodeIfPresent(String.self, forKey: .initialTo)
+        name = try? c.decodeIfPresent(String.self, forKey: .name)
         revision = try? c.decodeIfPresent(String.self, forKey: .revision)
         spec = try? c.decodeIfPresent(String.self, forKey: .spec)
         tabs = try? c.decodeIfPresent([ShellTabModel].self, forKey: .tabs)
@@ -756,6 +759,7 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
         case env
         case greeting
         case initialTo = "initial_to"
+        case name
         case revision
         case spec
         case tabs

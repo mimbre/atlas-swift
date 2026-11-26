@@ -2097,8 +2097,9 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
     public var icon: String?
     public var groups: [ShellGroupModel]?
     public var count: Int?
+    public var forYou: Bool?
 
-    public init(id: String? = nil, label: String? = nil, to: String? = nil, section: String? = nil, key: String? = nil, icon: String? = nil, groups: [ShellGroupModel]? = nil, count: Int? = nil) {
+    public init(id: String? = nil, label: String? = nil, to: String? = nil, section: String? = nil, key: String? = nil, icon: String? = nil, groups: [ShellGroupModel]? = nil, count: Int? = nil, forYou: Bool? = nil) {
         self.id = id
         self.label = label
         self.to = to
@@ -2107,6 +2108,7 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         self.icon = icon
         self.groups = groups
         self.count = count
+        self.forYou = forYou
     }
 
     public init(from decoder: any Decoder) throws {
@@ -2119,6 +2121,7 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
         groups = try? c.decodeIfPresent([ShellGroupModel].self, forKey: .groups)
         count = try? c.decodeIfPresent(Int.self, forKey: .count)
+        forYou = try? c.decodeIfPresent(Bool.self, forKey: .forYou)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -2130,6 +2133,7 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         case icon
         case groups
         case count
+        case forYou = "for_you"
     }
 }
 
@@ -2138,11 +2142,13 @@ public struct ShellGroupModel: Codable, Sendable, Equatable {
     public var label: String?
     public var to: String?
     public var count: Int?
+    public var forYou: Bool?
 
-    public init(label: String? = nil, to: String? = nil, count: Int? = nil) {
+    public init(label: String? = nil, to: String? = nil, count: Int? = nil, forYou: Bool? = nil) {
         self.label = label
         self.to = to
         self.count = count
+        self.forYou = forYou
     }
 
     public init(from decoder: any Decoder) throws {
@@ -2150,12 +2156,14 @@ public struct ShellGroupModel: Codable, Sendable, Equatable {
         label = try? c.decodeIfPresent(String.self, forKey: .label)
         to = try? c.decodeIfPresent(String.self, forKey: .to)
         count = try? c.decodeIfPresent(Int.self, forKey: .count)
+        forYou = try? c.decodeIfPresent(Bool.self, forKey: .forYou)
     }
 
     enum CodingKeys: String, CodingKey {
         case label
         case to
         case count
+        case forYou = "for_you"
     }
 }
 
@@ -2187,8 +2195,9 @@ public struct ShellModel: Codable, Sendable, Equatable {
     public var initialTo: String?
     public var activeTab: String?
     public var greeting: String?
+    public var name: String?
 
-    public init(title: String? = nil, env: String? = nil, spec: String? = nil, revision: String? = nil, tabs: [ShellTabModel]? = nil, initialTo: String? = nil, activeTab: String? = nil, greeting: String? = nil) {
+    public init(title: String? = nil, env: String? = nil, spec: String? = nil, revision: String? = nil, tabs: [ShellTabModel]? = nil, initialTo: String? = nil, activeTab: String? = nil, greeting: String? = nil, name: String? = nil) {
         self.title = title
         self.env = env
         self.spec = spec
@@ -2197,6 +2206,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         self.initialTo = initialTo
         self.activeTab = activeTab
         self.greeting = greeting
+        self.name = name
     }
 
     public init(from decoder: any Decoder) throws {
@@ -2209,6 +2219,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         initialTo = try? c.decodeIfPresent(String.self, forKey: .initialTo)
         activeTab = try? c.decodeIfPresent(String.self, forKey: .activeTab)
         greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
+        name = try? c.decodeIfPresent(String.self, forKey: .name)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -2220,6 +2231,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         case initialTo = "initial_to"
         case activeTab = "active_tab"
         case greeting
+        case name
     }
 }
 
