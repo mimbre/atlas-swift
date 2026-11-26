@@ -1750,8 +1750,9 @@ public struct RowModel: Codable, Sendable, Equatable {
     public var pending: Bool?
     public var tone: String?
     public var since: String?
+    public var kind: String?
 
-    public init(id: String? = nil, label: String? = nil, detail: String? = nil, to: String? = nil, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil) {
+    public init(id: String? = nil, label: String? = nil, detail: String? = nil, to: String? = nil, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil, kind: String? = nil) {
         self.id = id
         self.label = label
         self.detail = detail
@@ -1761,6 +1762,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         self.pending = pending
         self.tone = tone
         self.since = since
+        self.kind = kind
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1774,6 +1776,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         pending = try? c.decodeIfPresent(Bool.self, forKey: .pending)
         tone = try? c.decodeIfPresent(String.self, forKey: .tone)
         since = try? c.decodeIfPresent(String.self, forKey: .since)
+        kind = try? c.decodeIfPresent(String.self, forKey: .kind)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1786,6 +1789,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         case pending
         case tone
         case since
+        case kind
     }
 }
 
