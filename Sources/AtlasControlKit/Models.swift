@@ -1175,6 +1175,25 @@ public struct ChoiceOptionModel: Codable, Sendable, Equatable {
     }
 }
 
+/// The model `instruction_step`.
+public struct InstructionStepModel: Codable, Sendable, Equatable {
+    public var n: Int
+    public var text: String
+    public var commands: [String]
+
+    public init(n: Int, text: String, commands: [String]) {
+        self.n = n
+        self.text = text
+        self.commands = commands
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case n
+        case text
+        case commands
+    }
+}
+
 /// The model `link`.
 public struct LinkModel: Codable, Sendable, Equatable {
     public var label: String

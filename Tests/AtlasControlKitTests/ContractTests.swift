@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.25.0")
+        XCTAssertEqual(Contract.version, "0.27.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -105,6 +105,27 @@ final class ContractTests: XCTestCase {
         ] {
             let block = try decode(Block.self, text)
             XCTAssertEqual(block.content, .fallback(Fallback(type: "single_choice", reason: reason, raw: try json(text))))
+            try assertRoundTrip(block, text)
+        }
+    }
+
+    func test_block_steps_decodes_and_round_trips() throws {
+        for text in [##"{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":"title 1"},"type":"steps"}"##, ##"{"id":"b1","props":{"actions":[{"key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"current":7,"since":"since 1","steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":"title 1","why":"why 1"},"type":"steps"}"##] {
+            let block = try decode(Block.self, text)
+            guard case .steps = block.content else { return XCTFail("steps fell back: \(block.content)") }
+            XCTAssertEqual(block.type, "steps")
+            XCTAssertEqual(block.id, "b1")
+            try assertRoundTrip(block, text)
+        }
+    }
+
+    func test_block_steps_without_title_or_with_a_wrong_one_falls_back() throws {
+        for (text, reason) in [
+            (##"{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}]},"type":"steps"}"##, Fallback.Reason.missing(path: ["title"])),
+            (##"{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":1},"type":"steps"}"##, Fallback.Reason.wrongType(path: ["title"])),
+        ] {
+            let block = try decode(Block.self, text)
+            XCTAssertEqual(block.content, .fallback(Fallback(type: "steps", reason: reason, raw: try json(text))))
             try assertRoundTrip(block, text)
         }
     }
@@ -206,9 +227,9 @@ final class ContractTests: XCTestCase {
     }
 
     func test_a_list_of_blocks_keeps_every_known_block_around_a_fallback() throws {
-        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
+        let text = ##"[{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"groups":[{"count":7,"label":"label 1","to":"to 1"}]},"type":"groups"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"fields":[{"label":"label 1"}],"title":"title 1"},"type":"item"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"options":[{"answer":{"endpoint":"endpoint 1"},"consequences":"consequences 1","details":"details 1","effect":"effect 1","id":"id 1","rule":"rule 1","text":"text 1"}],"question":"question 1","rationale":"rationale 1","recommended":"recommended 1","revision":"revision 1"},"type":"single_choice"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"current":7,"steps":[{"commands":["commands 1"],"n":7,"text":"text 1"}],"title":"title 1"},"type":"steps"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"inputs":[{"kind":"kind 1","label":"label 1","name":"name 1"}],"submit_label":"submit_label 1","submit_to":{"endpoint":"endpoint 1"},"title":"title 1"},"type":"form"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"cancel_to":"cancel_to 1","text":"text 1","title":"title 1"},"type":"confirm"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"request":"request 1","state":"state 1","steps":[{"label":"label 1","n":7,"state":"state 1"}],"title":"title 1"},"type":"plan"},{"id":"zz","props":{"a":1},"type":"zz_unknown"},{"id":"b1","props":{"available":true,"keys":["keys 1"],"label":"label 1","operation":{"name":"name 1"},"scope":{"context":"context 1","page":"page 1","revision":"revision 1"}},"type":"console_action"},{"id":"zz","props":{"a":1},"type":"zz_unknown"}]"##
         let blocks = try decode([Block].self, text)
-        XCTAssertEqual(blocks.count, 16)
+        XCTAssertEqual(blocks.count, 18)
         for (i, block) in blocks.enumerated() {
             if case .fallback(let fallback) = block.content {
                 XCTAssertEqual(i % 2, 1)
@@ -428,6 +449,14 @@ final class ContractTests: XCTestCase {
         XCTAssertEqual(Page.match(path), PageMatch(page: .answer, params: params))
         XCTAssertEqual(Page.answer.template, "/k/:kind/:key/answer/:answer")
         XCTAssertThrowsError(try Page.answer.path([:])) { XCTAssertEqual($0 as? PathError, .missing(page: .answer, param: "kind")) }
+    }
+
+    func test_page_step_builds_and_matches_its_path() throws {
+        let params: [String: String] = ["key": "v key/1", "kind": "v kind/1", "step": "v step/1"]
+        let path = try Page.step.path(params)
+        XCTAssertEqual(Page.match(path), PageMatch(page: .step, params: params))
+        XCTAssertEqual(Page.step.template, "/k/:kind/:key/step/:step")
+        XCTAssertThrowsError(try Page.step.path([:])) { XCTAssertEqual($0 as? PathError, .missing(page: .step, param: "kind")) }
     }
 
     func test_page_remove_builds_and_matches_its_path() throws {

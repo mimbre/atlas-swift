@@ -112,6 +112,7 @@ public enum Page: String, CaseIterable, Sendable {
     case links
     case set
     case answer
+    case step
     case remove
     case pickUp = "pick_up"
     case handOver = "hand_over"
@@ -146,6 +147,7 @@ public enum Page: String, CaseIterable, Sendable {
         case .links: "/k/:kind/:key/links/:relation"
         case .set: "/k/:kind/:key/set/:relation"
         case .answer: "/k/:kind/:key/answer/:answer"
+        case .step: "/k/:kind/:key/step/:step"
         case .remove: "/k/:kind/:key/remove/:relation"
         case .pickUp: "/k/:kind/:key/pick_up/:run"
         case .handOver: "/k/:kind/:key/hand_over/:run"
