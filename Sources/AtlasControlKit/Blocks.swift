@@ -58,37 +58,6 @@ public struct ItemBlock: Codable, Sendable, Equatable {
     }
 }
 
-/// The props of the block `single_choice`.
-public struct SingleChoiceBlock: Codable, Sendable, Equatable {
-    public var question: String
-    public var options: [ChoiceOptionModel]
-    public var recommended: String
-    public var rationale: String
-    public var revision: String
-    public var instructions: String?
-    public var key: String?
-
-    public init(question: String, options: [ChoiceOptionModel], recommended: String, rationale: String, revision: String, instructions: String? = nil, key: String? = nil) {
-        self.question = question
-        self.options = options
-        self.recommended = recommended
-        self.rationale = rationale
-        self.revision = revision
-        self.instructions = instructions
-        self.key = key
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case question
-        case options
-        case recommended
-        case rationale
-        case revision
-        case instructions
-        case key
-    }
-}
-
 /// The props of the block `header`.
 public struct HeaderBlock: Codable, Sendable, Equatable {
     public var title: String
@@ -113,17 +82,20 @@ public struct TextBlock: Codable, Sendable, Equatable {
     public var text: String
     public var label: String?
     public var since: String?
+    public var role: String?
 
-    public init(text: String, label: String? = nil, since: String? = nil) {
+    public init(text: String, label: String? = nil, since: String? = nil, role: String? = nil) {
         self.text = text
         self.label = label
         self.since = since
+        self.role = role
     }
 
     enum CodingKeys: String, CodingKey {
         case text
         case label
         case since
+        case role
     }
 }
 
@@ -156,6 +128,34 @@ public struct AnswersBlock: Codable, Sendable, Equatable {
     }
 }
 
+/// The props of the block `option`.
+public struct OptionBlock: Codable, Sendable, Equatable {
+    public var n: Int
+    public var text: String
+    public var badge: String?
+    public var tone: String?
+    public var fields: [PairModel]
+    public var answer: PanelAnswerModel
+
+    public init(n: Int, text: String, badge: String? = nil, tone: String? = nil, fields: [PairModel], answer: PanelAnswerModel) {
+        self.n = n
+        self.text = text
+        self.badge = badge
+        self.tone = tone
+        self.fields = fields
+        self.answer = answer
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case n
+        case text
+        case badge
+        case tone
+        case fields
+        case answer
+    }
+}
+
 /// The props of the block `panel`.
 public struct PanelBlock: Codable, Sendable, Equatable {
     public var heading: String
@@ -167,11 +167,10 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     public var checks: [CheckModel]?
     public var box: BoxModel?
     public var answers: [PanelAnswerModel]?
-    public var choose: Bool?
     public var actions: [ActionModel]?
     public var links: [LinkModel]?
 
-    public init(heading: String, title: String, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, choose: Bool? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
+    public init(heading: String, title: String, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
         self.heading = heading
         self.title = title
         self.key = key
@@ -181,7 +180,6 @@ public struct PanelBlock: Codable, Sendable, Equatable {
         self.checks = checks
         self.box = box
         self.answers = answers
-        self.choose = choose
         self.actions = actions
         self.links = links
     }
@@ -196,7 +194,6 @@ public struct PanelBlock: Codable, Sendable, Equatable {
         case checks
         case box
         case answers
-        case choose
         case actions
         case links
     }
@@ -328,11 +325,11 @@ public struct Block: Codable, Sendable, Equatable {
         case list(ListBlock)
         case groups(GroupsBlock)
         case item(ItemBlock)
-        case singleChoice(SingleChoiceBlock)
         case header(HeaderBlock)
         case text(TextBlock)
         case instruction(InstructionBlock)
         case answers(AnswersBlock)
+        case option(OptionBlock)
         case panel(PanelBlock)
         case form(FormBlock)
         case confirm(ConfirmBlock)
@@ -352,11 +349,11 @@ public struct Block: Codable, Sendable, Equatable {
         case .list: "list"
         case .groups: "groups"
         case .item: "item"
-        case .singleChoice: "single_choice"
         case .header: "header"
         case .text: "text"
         case .instruction: "instruction"
         case .answers: "answers"
+        case .option: "option"
         case .panel: "panel"
         case .form: "form"
         case .confirm: "confirm"
@@ -379,11 +376,11 @@ public struct Block: Codable, Sendable, Equatable {
             case "list": content = .list(try props.decode(ListBlock.self))
             case "groups": content = .groups(try props.decode(GroupsBlock.self))
             case "item": content = .item(try props.decode(ItemBlock.self))
-            case "single_choice": content = .singleChoice(try props.decode(SingleChoiceBlock.self))
             case "header": content = .header(try props.decode(HeaderBlock.self))
             case "text": content = .text(try props.decode(TextBlock.self))
             case "instruction": content = .instruction(try props.decode(InstructionBlock.self))
             case "answers": content = .answers(try props.decode(AnswersBlock.self))
+            case "option": content = .option(try props.decode(OptionBlock.self))
             case "panel": content = .panel(try props.decode(PanelBlock.self))
             case "form": content = .form(try props.decode(FormBlock.self))
             case "confirm": content = .confirm(try props.decode(ConfirmBlock.self))
@@ -405,11 +402,11 @@ public struct Block: Codable, Sendable, Equatable {
         case .list(let props): try BlockWire(id: id, type: "list", props: props).encode(to: encoder)
         case .groups(let props): try BlockWire(id: id, type: "groups", props: props).encode(to: encoder)
         case .item(let props): try BlockWire(id: id, type: "item", props: props).encode(to: encoder)
-        case .singleChoice(let props): try BlockWire(id: id, type: "single_choice", props: props).encode(to: encoder)
         case .header(let props): try BlockWire(id: id, type: "header", props: props).encode(to: encoder)
         case .text(let props): try BlockWire(id: id, type: "text", props: props).encode(to: encoder)
         case .instruction(let props): try BlockWire(id: id, type: "instruction", props: props).encode(to: encoder)
         case .answers(let props): try BlockWire(id: id, type: "answers", props: props).encode(to: encoder)
+        case .option(let props): try BlockWire(id: id, type: "option", props: props).encode(to: encoder)
         case .panel(let props): try BlockWire(id: id, type: "panel", props: props).encode(to: encoder)
         case .form(let props): try BlockWire(id: id, type: "form", props: props).encode(to: encoder)
         case .confirm(let props): try BlockWire(id: id, type: "confirm", props: props).encode(to: encoder)

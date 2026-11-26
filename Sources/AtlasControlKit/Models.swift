@@ -1138,43 +1138,6 @@ public struct ActionModel: Codable, Sendable, Equatable {
     }
 }
 
-/// The model `choice_option`.
-public struct ChoiceOptionModel: Codable, Sendable, Equatable {
-    public var id: String
-    public var text: String
-    public var details: String
-    public var effect: String
-    public var rule: String
-    public var consequences: String
-    public var answer: CallModel
-    public var note: Bool?
-    public var shortcut: String?
-
-    public init(id: String, text: String, details: String, effect: String, rule: String, consequences: String, answer: CallModel, note: Bool? = nil, shortcut: String? = nil) {
-        self.id = id
-        self.text = text
-        self.details = details
-        self.effect = effect
-        self.rule = rule
-        self.consequences = consequences
-        self.answer = answer
-        self.note = note
-        self.shortcut = shortcut
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case text
-        case details
-        case effect
-        case rule
-        case consequences
-        case answer
-        case note
-        case shortcut
-    }
-}
-
 /// The model `instruction_line`.
 public struct InstructionLineModel: Codable, Sendable, Equatable {
     public var kind: String
@@ -1277,17 +1240,13 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
     public var to: String
     public var submitTo: CallModel?
     public var note: Bool?
-    public var recommended: Bool?
-    public var detail: String?
 
-    public init(label: String, key: String, to: String, submitTo: CallModel? = nil, note: Bool? = nil, recommended: Bool? = nil, detail: String? = nil) {
+    public init(label: String, key: String, to: String, submitTo: CallModel? = nil, note: Bool? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.note = note
-        self.recommended = recommended
-        self.detail = detail
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1296,8 +1255,6 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         case to
         case submitTo = "submit_to"
         case note
-        case recommended
-        case detail
     }
 }
 
