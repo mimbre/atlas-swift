@@ -1697,8 +1697,9 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
     public var weight: String?
     public var button: String?
     public var detail: String?
+    public var icon: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil, button: String? = nil, detail: String? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil, button: String? = nil, detail: String? = nil, icon: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
@@ -1707,6 +1708,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         self.weight = weight
         self.button = button
         self.detail = detail
+        self.icon = icon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1719,6 +1721,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         weight = try? c.decodeIfPresent(String.self, forKey: .weight)
         button = try? c.decodeIfPresent(String.self, forKey: .button)
         detail = try? c.decodeIfPresent(String.self, forKey: .detail)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1730,6 +1733,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         case weight
         case button
         case detail
+        case icon
     }
 }
 
