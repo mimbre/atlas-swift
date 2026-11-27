@@ -22,11 +22,11 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.43.0")
+        XCTAssertEqual(Contract.version, "0.44.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
-        for text in [##"{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"}"##, ##"{"id":"b1","props":{"actions":[{"button":"button 1","help":"help 1","icon":"icon 1","key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"empty":"empty 1","rows":[{"detail":"detail 1","icon":"icon 1","id":"id 1","key":"key 1","kind":"kind 1","label":"label 1","links":[{"key":"key 1","label":"label 1","url":"url 1"}],"pending":true,"since":"since 1","to":"to 1","tone":"tone 1"}],"title":"title 1"},"type":"list"}"##] {
+        for text in [##"{"id":"b1","props":{"rows":[{"label":"label 1","to":"to 1"}]},"type":"list"}"##, ##"{"id":"b1","props":{"actions":[{"button":"button 1","help":"help 1","icon":"icon 1","key":"key 1","label":"label 1","page":true,"submit_to":{"endpoint":"endpoint 1","params":{"k":"params 1"}},"to":"to 1"}],"aside":"aside 1","empty":"empty 1","rows":[{"detail":"detail 1","icon":"icon 1","id":"id 1","key":"key 1","kind":"kind 1","label":"label 1","links":[{"key":"key 1","label":"label 1","url":"url 1"}],"pending":true,"since":"since 1","to":"to 1","tone":"tone 1"}],"title":"title 1"},"type":"list"}"##] {
             let block = try decode(Block.self, text)
             guard case .list = block.content else { return XCTFail("list fell back: \(block.content)") }
             XCTAssertEqual(block.type, "list")
@@ -83,7 +83,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_block_header_decodes_and_round_trips() throws {
-        for text in [##"{"id":"b1","props":{"title":"title 1"},"type":"header"}"##, ##"{"id":"b1","props":{"eyebrow":"eyebrow 1","icon":"icon 1","key":"key 1","title":"title 1"},"type":"header"}"##] {
+        for text in [##"{"id":"b1","props":{"title":"title 1"},"type":"header"}"##, ##"{"id":"b1","props":{"detail":"detail 1","eyebrow":"eyebrow 1","icon":"icon 1","key":"key 1","since":"since 1","title":"title 1"},"type":"header"}"##] {
             let block = try decode(Block.self, text)
             guard case .header = block.content else { return XCTFail("header fell back: \(block.content)") }
             XCTAssertEqual(block.type, "header")

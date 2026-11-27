@@ -7,12 +7,14 @@ public struct ListBlock: Codable, Sendable, Equatable {
     public var rows: [RowModel]?
     public var empty: String?
     public var actions: [ActionModel]?
+    public var aside: String?
 
-    public init(title: String? = nil, rows: [RowModel]? = nil, empty: String? = nil, actions: [ActionModel]? = nil) {
+    public init(title: String? = nil, rows: [RowModel]? = nil, empty: String? = nil, actions: [ActionModel]? = nil, aside: String? = nil) {
         self.title = title
         self.rows = rows
         self.empty = empty
         self.actions = actions
+        self.aside = aside
     }
 
     public init(from decoder: any Decoder) throws {
@@ -21,6 +23,7 @@ public struct ListBlock: Codable, Sendable, Equatable {
         rows = try? c.decodeIfPresent([RowModel].self, forKey: .rows)
         empty = try? c.decodeIfPresent(String.self, forKey: .empty)
         actions = try? c.decodeIfPresent([ActionModel].self, forKey: .actions)
+        aside = try? c.decodeIfPresent(String.self, forKey: .aside)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -28,6 +31,7 @@ public struct ListBlock: Codable, Sendable, Equatable {
         case rows
         case empty
         case actions
+        case aside
     }
 }
 
@@ -85,12 +89,16 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
     public var eyebrow: String?
     public var key: String?
     public var icon: String?
+    public var detail: String?
+    public var since: String?
 
-    public init(title: String? = nil, eyebrow: String? = nil, key: String? = nil, icon: String? = nil) {
+    public init(title: String? = nil, eyebrow: String? = nil, key: String? = nil, icon: String? = nil, detail: String? = nil, since: String? = nil) {
         self.title = title
         self.eyebrow = eyebrow
         self.key = key
         self.icon = icon
+        self.detail = detail
+        self.since = since
     }
 
     public init(from decoder: any Decoder) throws {
@@ -99,6 +107,8 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
         eyebrow = try? c.decodeIfPresent(String.self, forKey: .eyebrow)
         key = try? c.decodeIfPresent(String.self, forKey: .key)
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
+        detail = try? c.decodeIfPresent(String.self, forKey: .detail)
+        since = try? c.decodeIfPresent(String.self, forKey: .since)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -106,6 +116,8 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
         case eyebrow
         case key
         case icon
+        case detail
+        case since
     }
 }
 
