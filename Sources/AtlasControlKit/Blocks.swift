@@ -201,14 +201,16 @@ public struct OptionBlock: Codable, Sendable, Equatable {
     public var tone: String?
     public var fields: [PairModel]?
     public var answer: PanelAnswerModel?
+    public var alone: Bool?
 
-    public init(n: Int? = nil, text: String? = nil, badge: String? = nil, tone: String? = nil, fields: [PairModel]? = nil, answer: PanelAnswerModel? = nil) {
+    public init(n: Int? = nil, text: String? = nil, badge: String? = nil, tone: String? = nil, fields: [PairModel]? = nil, answer: PanelAnswerModel? = nil, alone: Bool? = nil) {
         self.n = n
         self.text = text
         self.badge = badge
         self.tone = tone
         self.fields = fields
         self.answer = answer
+        self.alone = alone
     }
 
     public init(from decoder: any Decoder) throws {
@@ -219,6 +221,7 @@ public struct OptionBlock: Codable, Sendable, Equatable {
         tone = try? c.decodeIfPresent(String.self, forKey: .tone)
         fields = try? c.decodeIfPresent([PairModel].self, forKey: .fields)
         answer = try? c.decodeIfPresent(PanelAnswerModel.self, forKey: .answer)
+        alone = try? c.decodeIfPresent(Bool.self, forKey: .alone)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -228,6 +231,7 @@ public struct OptionBlock: Codable, Sendable, Equatable {
         case tone
         case fields
         case answer
+        case alone
     }
 }
 

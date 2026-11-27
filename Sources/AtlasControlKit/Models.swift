@@ -1523,14 +1523,16 @@ public struct ActionModel: Codable, Sendable, Equatable {
     public var submitTo: CallModel?
     public var page: Bool?
     public var icon: String?
+    public var button: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil, icon: String? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil, icon: String? = nil, button: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.page = page
         self.icon = icon
+        self.button = button
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1541,6 +1543,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
         page = try? c.decodeIfPresent(Bool.self, forKey: .page)
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
+        button = try? c.decodeIfPresent(String.self, forKey: .button)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1550,6 +1553,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         case submitTo = "submit_to"
         case page
         case icon
+        case button
     }
 }
 
@@ -1691,14 +1695,18 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
     public var submitTo: CallModel?
     public var note: Bool?
     public var weight: String?
+    public var button: String?
+    public var detail: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil, button: String? = nil, detail: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
         self.submitTo = submitTo
         self.note = note
         self.weight = weight
+        self.button = button
+        self.detail = detail
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1709,6 +1717,8 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         submitTo = try? c.decodeIfPresent(CallModel.self, forKey: .submitTo)
         note = try? c.decodeIfPresent(Bool.self, forKey: .note)
         weight = try? c.decodeIfPresent(String.self, forKey: .weight)
+        button = try? c.decodeIfPresent(String.self, forKey: .button)
+        detail = try? c.decodeIfPresent(String.self, forKey: .detail)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1718,6 +1728,8 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         case submitTo = "submit_to"
         case note
         case weight
+        case button
+        case detail
     }
 }
 
