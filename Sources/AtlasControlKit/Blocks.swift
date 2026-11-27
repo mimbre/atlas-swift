@@ -84,11 +84,13 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
     public var title: String?
     public var eyebrow: String?
     public var key: String?
+    public var icon: String?
 
-    public init(title: String? = nil, eyebrow: String? = nil, key: String? = nil) {
+    public init(title: String? = nil, eyebrow: String? = nil, key: String? = nil, icon: String? = nil) {
         self.title = title
         self.eyebrow = eyebrow
         self.key = key
+        self.icon = icon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -96,12 +98,14 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
         title = try? c.decodeIfPresent(String.self, forKey: .title)
         eyebrow = try? c.decodeIfPresent(String.self, forKey: .eyebrow)
         key = try? c.decodeIfPresent(String.self, forKey: .key)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
     }
 
     enum CodingKeys: String, CodingKey {
         case title
         case eyebrow
         case key
+        case icon
     }
 }
 
@@ -241,6 +245,7 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     public var title: String?
     public var key: String?
     public var aside: String?
+    public var icon: String?
     public var byline: [ClauseModel]?
     public var items: [PanelItemModel]?
     public var checks: [CheckModel]?
@@ -249,11 +254,12 @@ public struct PanelBlock: Codable, Sendable, Equatable {
     public var actions: [ActionModel]?
     public var links: [LinkModel]?
 
-    public init(heading: String? = nil, title: String? = nil, key: String? = nil, aside: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
+    public init(heading: String? = nil, title: String? = nil, key: String? = nil, aside: String? = nil, icon: String? = nil, byline: [ClauseModel]? = nil, items: [PanelItemModel]? = nil, checks: [CheckModel]? = nil, box: BoxModel? = nil, answers: [PanelAnswerModel]? = nil, actions: [ActionModel]? = nil, links: [LinkModel]? = nil) {
         self.heading = heading
         self.title = title
         self.key = key
         self.aside = aside
+        self.icon = icon
         self.byline = byline
         self.items = items
         self.checks = checks
@@ -269,6 +275,7 @@ public struct PanelBlock: Codable, Sendable, Equatable {
         title = try? c.decodeIfPresent(String.self, forKey: .title)
         key = try? c.decodeIfPresent(String.self, forKey: .key)
         aside = try? c.decodeIfPresent(String.self, forKey: .aside)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
         byline = try? c.decodeIfPresent([ClauseModel].self, forKey: .byline)
         items = try? c.decodeIfPresent([PanelItemModel].self, forKey: .items)
         checks = try? c.decodeIfPresent([CheckModel].self, forKey: .checks)
@@ -283,6 +290,7 @@ public struct PanelBlock: Codable, Sendable, Equatable {
         case title
         case key
         case aside
+        case icon
         case byline
         case items
         case checks

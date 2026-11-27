@@ -1775,8 +1775,9 @@ public struct RowModel: Codable, Sendable, Equatable {
     public var tone: String?
     public var since: String?
     public var kind: String?
+    public var icon: String?
 
-    public init(id: String? = nil, label: String? = nil, detail: String? = nil, to: String? = nil, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil, kind: String? = nil) {
+    public init(id: String? = nil, label: String? = nil, detail: String? = nil, to: String? = nil, links: [LinkModel]? = nil, key: String? = nil, pending: Bool? = nil, tone: String? = nil, since: String? = nil, kind: String? = nil, icon: String? = nil) {
         self.id = id
         self.label = label
         self.detail = detail
@@ -1787,6 +1788,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         self.tone = tone
         self.since = since
         self.kind = kind
+        self.icon = icon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1801,6 +1803,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         tone = try? c.decodeIfPresent(String.self, forKey: .tone)
         since = try? c.decodeIfPresent(String.self, forKey: .since)
         kind = try? c.decodeIfPresent(String.self, forKey: .kind)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1814,6 +1817,7 @@ public struct RowModel: Codable, Sendable, Equatable {
         case tone
         case since
         case kind
+        case icon
     }
 }
 
@@ -2159,12 +2163,14 @@ public struct ShellGroupModel: Codable, Sendable, Equatable {
     public var to: String?
     public var count: Int?
     public var forYou: Bool?
+    public var icon: String?
 
-    public init(label: String? = nil, to: String? = nil, count: Int? = nil, forYou: Bool? = nil) {
+    public init(label: String? = nil, to: String? = nil, count: Int? = nil, forYou: Bool? = nil, icon: String? = nil) {
         self.label = label
         self.to = to
         self.count = count
         self.forYou = forYou
+        self.icon = icon
     }
 
     public init(from decoder: any Decoder) throws {
@@ -2173,6 +2179,7 @@ public struct ShellGroupModel: Codable, Sendable, Equatable {
         to = try? c.decodeIfPresent(String.self, forKey: .to)
         count = try? c.decodeIfPresent(Int.self, forKey: .count)
         forYou = try? c.decodeIfPresent(Bool.self, forKey: .forYou)
+        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -2180,6 +2187,7 @@ public struct ShellGroupModel: Codable, Sendable, Equatable {
         case to
         case count
         case forYou = "for_you"
+        case icon
     }
 }
 
