@@ -2153,18 +2153,16 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
     public var section: String?
     public var key: String?
     public var icon: String?
-    public var groups: [ShellGroupModel]?
     public var count: Int?
     public var forYou: Bool?
 
-    public init(id: String? = nil, label: String? = nil, to: String? = nil, section: String? = nil, key: String? = nil, icon: String? = nil, groups: [ShellGroupModel]? = nil, count: Int? = nil, forYou: Bool? = nil) {
+    public init(id: String? = nil, label: String? = nil, to: String? = nil, section: String? = nil, key: String? = nil, icon: String? = nil, count: Int? = nil, forYou: Bool? = nil) {
         self.id = id
         self.label = label
         self.to = to
         self.section = section
         self.key = key
         self.icon = icon
-        self.groups = groups
         self.count = count
         self.forYou = forYou
     }
@@ -2177,7 +2175,6 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         section = try? c.decodeIfPresent(String.self, forKey: .section)
         key = try? c.decodeIfPresent(String.self, forKey: .key)
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
-        groups = try? c.decodeIfPresent([ShellGroupModel].self, forKey: .groups)
         count = try? c.decodeIfPresent(Int.self, forKey: .count)
         forYou = try? c.decodeIfPresent(Bool.self, forKey: .forYou)
     }
@@ -2189,43 +2186,8 @@ public struct ShellTabModel: Codable, Sendable, Equatable {
         case section
         case key
         case icon
-        case groups
         case count
         case forYou = "for_you"
-    }
-}
-
-/// The model `shell_group`.
-public struct ShellGroupModel: Codable, Sendable, Equatable {
-    public var label: String?
-    public var to: String?
-    public var count: Int?
-    public var forYou: Bool?
-    public var icon: String?
-
-    public init(label: String? = nil, to: String? = nil, count: Int? = nil, forYou: Bool? = nil, icon: String? = nil) {
-        self.label = label
-        self.to = to
-        self.count = count
-        self.forYou = forYou
-        self.icon = icon
-    }
-
-    public init(from decoder: any Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        label = try? c.decodeIfPresent(String.self, forKey: .label)
-        to = try? c.decodeIfPresent(String.self, forKey: .to)
-        count = try? c.decodeIfPresent(Int.self, forKey: .count)
-        forYou = try? c.decodeIfPresent(Bool.self, forKey: .forYou)
-        icon = try? c.decodeIfPresent(String.self, forKey: .icon)
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case label
-        case to
-        case count
-        case forYou = "for_you"
-        case icon
     }
 }
 
