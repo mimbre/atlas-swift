@@ -1524,8 +1524,9 @@ public struct ActionModel: Codable, Sendable, Equatable {
     public var page: Bool?
     public var icon: String?
     public var button: String?
+    public var help: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil, icon: String? = nil, button: String? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, page: Bool? = nil, icon: String? = nil, button: String? = nil, help: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
@@ -1533,6 +1534,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         self.page = page
         self.icon = icon
         self.button = button
+        self.help = help
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1544,6 +1546,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         page = try? c.decodeIfPresent(Bool.self, forKey: .page)
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
         button = try? c.decodeIfPresent(String.self, forKey: .button)
+        help = try? c.decodeIfPresent(String.self, forKey: .help)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1554,6 +1557,7 @@ public struct ActionModel: Codable, Sendable, Equatable {
         case page
         case icon
         case button
+        case help
     }
 }
 
@@ -1698,8 +1702,9 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
     public var button: String?
     public var detail: String?
     public var icon: String?
+    public var help: String?
 
-    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil, button: String? = nil, detail: String? = nil, icon: String? = nil) {
+    public init(label: String? = nil, key: String? = nil, to: String? = nil, submitTo: CallModel? = nil, note: Bool? = nil, weight: String? = nil, button: String? = nil, detail: String? = nil, icon: String? = nil, help: String? = nil) {
         self.label = label
         self.key = key
         self.to = to
@@ -1709,6 +1714,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         self.button = button
         self.detail = detail
         self.icon = icon
+        self.help = help
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1722,6 +1728,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         button = try? c.decodeIfPresent(String.self, forKey: .button)
         detail = try? c.decodeIfPresent(String.self, forKey: .detail)
         icon = try? c.decodeIfPresent(String.self, forKey: .icon)
+        help = try? c.decodeIfPresent(String.self, forKey: .help)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1734,6 +1741,7 @@ public struct PanelAnswerModel: Codable, Sendable, Equatable {
         case button
         case detail
         case icon
+        case help
     }
 }
 
@@ -1907,21 +1915,47 @@ public struct PairModel: Codable, Sendable, Equatable {
 public struct ChoiceModel: Codable, Sendable, Equatable {
     public var value: String?
     public var label: String?
+    public var help: String?
 
-    public init(value: String? = nil, label: String? = nil) {
+    public init(value: String? = nil, label: String? = nil, help: String? = nil) {
         self.value = value
         self.label = label
+        self.help = help
     }
 
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         value = try? c.decodeIfPresent(String.self, forKey: .value)
         label = try? c.decodeIfPresent(String.self, forKey: .label)
+        help = try? c.decodeIfPresent(String.self, forKey: .help)
     }
 
     enum CodingKeys: String, CodingKey {
         case value
         case label
+        case help
+    }
+}
+
+/// The model `input_condition`.
+public struct InputConditionModel: Codable, Sendable, Equatable {
+    public var name: String?
+    public var value: String?
+
+    public init(name: String? = nil, value: String? = nil) {
+        self.name = name
+        self.value = value
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        name = try? c.decodeIfPresent(String.self, forKey: .name)
+        value = try? c.decodeIfPresent(String.self, forKey: .value)
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case value
     }
 }
 
@@ -1934,8 +1968,9 @@ public struct InputModel: Codable, Sendable, Equatable {
     public var required: Bool?
     public var hint: String?
     public var choices: [ChoiceModel]?
+    public var shownWhen: InputConditionModel?
 
-    public init(name: String? = nil, label: String? = nil, kind: String? = nil, value: String? = nil, required: Bool? = nil, hint: String? = nil, choices: [ChoiceModel]? = nil) {
+    public init(name: String? = nil, label: String? = nil, kind: String? = nil, value: String? = nil, required: Bool? = nil, hint: String? = nil, choices: [ChoiceModel]? = nil, shownWhen: InputConditionModel? = nil) {
         self.name = name
         self.label = label
         self.kind = kind
@@ -1943,6 +1978,7 @@ public struct InputModel: Codable, Sendable, Equatable {
         self.required = required
         self.hint = hint
         self.choices = choices
+        self.shownWhen = shownWhen
     }
 
     public init(from decoder: any Decoder) throws {
@@ -1954,6 +1990,7 @@ public struct InputModel: Codable, Sendable, Equatable {
         required = try? c.decodeIfPresent(Bool.self, forKey: .required)
         hint = try? c.decodeIfPresent(String.self, forKey: .hint)
         choices = try? c.decodeIfPresent([ChoiceModel].self, forKey: .choices)
+        shownWhen = try? c.decodeIfPresent(InputConditionModel.self, forKey: .shownWhen)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -1964,6 +2001,7 @@ public struct InputModel: Codable, Sendable, Equatable {
         case required
         case hint
         case choices
+        case shownWhen = "shown_when"
     }
 }
 
