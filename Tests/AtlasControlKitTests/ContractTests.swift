@@ -22,7 +22,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_version() {
-        XCTAssertEqual(Contract.version, "0.41.0")
+        XCTAssertEqual(Contract.version, "0.43.0")
     }
 
     func test_block_list_decodes_and_round_trips() throws {
@@ -416,6 +416,29 @@ final class ContractTests: XCTestCase {
         let path = try Page.workers.path(params)
         XCTAssertEqual(Page.match(path), PageMatch(page: .workers, params: params))
         XCTAssertEqual(Page.workers.template, "/workers")
+    }
+
+    func test_page_machines_builds_and_matches_its_path() throws {
+        let params: [String: String] = [:]
+        let path = try Page.machines.path(params)
+        XCTAssertEqual(Page.match(path), PageMatch(page: .machines, params: params))
+        XCTAssertEqual(Page.machines.template, "/machines")
+    }
+
+    func test_page_machine_builds_and_matches_its_path() throws {
+        let params: [String: String] = ["machine": "v machine/1"]
+        let path = try Page.machine.path(params)
+        XCTAssertEqual(Page.match(path), PageMatch(page: .machine, params: params))
+        XCTAssertEqual(Page.machine.template, "/machines/:machine")
+        XCTAssertThrowsError(try Page.machine.path([:])) { XCTAssertEqual($0 as? PathError, .missing(page: .machine, param: "machine")) }
+    }
+
+    func test_page_machine_upgrade_builds_and_matches_its_path() throws {
+        let params: [String: String] = ["machine": "v machine/1"]
+        let path = try Page.machineUpgrade.path(params)
+        XCTAssertEqual(Page.match(path), PageMatch(page: .machineUpgrade, params: params))
+        XCTAssertEqual(Page.machineUpgrade.template, "/machines/:machine/upgrade")
+        XCTAssertThrowsError(try Page.machineUpgrade.path([:])) { XCTAssertEqual($0 as? PathError, .missing(page: .machineUpgrade, param: "machine")) }
     }
 
     func test_page_health_builds_and_matches_its_path() throws {
@@ -821,7 +844,7 @@ final class ContractTests: XCTestCase {
     }
 
     func test_control_message_boot_shell_decodes_and_round_trips() throws {
-        let text = ##"{"active_tab":"active_tab 1","env":"env 1","greeting":"greeting 1","initial_to":"initial_to 1","name":"name 1","op":"boot","revision":"revision 1","spec":"spec 1","tabs":[{"count":7,"for_you":true,"groups":[{"count":7,"for_you":true,"icon":"icon 1","label":"label 1","to":"to 1"}],"icon":"icon 1","id":"id 1","key":"key 1","label":"label 1","section":"section 1","to":"to 1"}],"title":"title 1"}"##
+        let text = ##"{"active_tab":"active_tab 1","assistant":"assistant 1","env":"env 1","greeting":"greeting 1","initial_to":"initial_to 1","name":"name 1","op":"boot","revision":"revision 1","spec":"spec 1","tabs":[{"count":7,"for_you":true,"groups":[{"count":7,"for_you":true,"icon":"icon 1","label":"label 1","to":"to 1"}],"icon":"icon 1","id":"id 1","key":"key 1","label":"label 1","section":"section 1","to":"to 1"}],"title":"title 1"}"##
         let message = try decode(ControlMessage.self, text)
         guard case .bootShell = message else { return XCTFail("decoded as \(message)") }
         try assertRoundTrip(message, text)

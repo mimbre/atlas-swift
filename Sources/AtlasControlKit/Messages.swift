@@ -720,6 +720,7 @@ public struct WorkerOutputUnsubscribeErrorMessage: Codable, Sendable, Equatable 
 /// The fields of a message (its selectors are the case's).
 public struct BootShellMessage: Codable, Sendable, Equatable {
     public var activeTab: String?
+    public var assistant: String?
     public var env: String?
     public var greeting: String?
     public var initialTo: String?
@@ -729,8 +730,9 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
     public var tabs: [ShellTabModel]?
     public var title: String?
 
-    public init(activeTab: String? = nil, env: String? = nil, greeting: String? = nil, initialTo: String? = nil, name: String? = nil, revision: String? = nil, spec: String? = nil, tabs: [ShellTabModel]? = nil, title: String? = nil) {
+    public init(activeTab: String? = nil, assistant: String? = nil, env: String? = nil, greeting: String? = nil, initialTo: String? = nil, name: String? = nil, revision: String? = nil, spec: String? = nil, tabs: [ShellTabModel]? = nil, title: String? = nil) {
         self.activeTab = activeTab
+        self.assistant = assistant
         self.env = env
         self.greeting = greeting
         self.initialTo = initialTo
@@ -744,6 +746,7 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         activeTab = try? c.decodeIfPresent(String.self, forKey: .activeTab)
+        assistant = try? c.decodeIfPresent(String.self, forKey: .assistant)
         env = try? c.decodeIfPresent(String.self, forKey: .env)
         greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
         initialTo = try? c.decodeIfPresent(String.self, forKey: .initialTo)
@@ -756,6 +759,7 @@ public struct BootShellMessage: Codable, Sendable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case activeTab = "active_tab"
+        case assistant
         case env
         case greeting
         case initialTo = "initial_to"

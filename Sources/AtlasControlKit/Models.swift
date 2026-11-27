@@ -2258,8 +2258,9 @@ public struct ShellModel: Codable, Sendable, Equatable {
     public var activeTab: String?
     public var greeting: String?
     public var name: String?
+    public var assistant: String?
 
-    public init(title: String? = nil, env: String? = nil, spec: String? = nil, revision: String? = nil, tabs: [ShellTabModel]? = nil, initialTo: String? = nil, activeTab: String? = nil, greeting: String? = nil, name: String? = nil) {
+    public init(title: String? = nil, env: String? = nil, spec: String? = nil, revision: String? = nil, tabs: [ShellTabModel]? = nil, initialTo: String? = nil, activeTab: String? = nil, greeting: String? = nil, name: String? = nil, assistant: String? = nil) {
         self.title = title
         self.env = env
         self.spec = spec
@@ -2269,6 +2270,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         self.activeTab = activeTab
         self.greeting = greeting
         self.name = name
+        self.assistant = assistant
     }
 
     public init(from decoder: any Decoder) throws {
@@ -2282,6 +2284,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         activeTab = try? c.decodeIfPresent(String.self, forKey: .activeTab)
         greeting = try? c.decodeIfPresent(String.self, forKey: .greeting)
         name = try? c.decodeIfPresent(String.self, forKey: .name)
+        assistant = try? c.decodeIfPresent(String.self, forKey: .assistant)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -2294,6 +2297,7 @@ public struct ShellModel: Codable, Sendable, Equatable {
         case activeTab = "active_tab"
         case greeting
         case name
+        case assistant
     }
 }
 

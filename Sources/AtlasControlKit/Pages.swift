@@ -98,6 +98,9 @@ public enum Page: String, CaseIterable, Sendable {
     case supervisedByYou = "supervised_by_you"
     case supervisedByYouGroup = "supervised_by_you_group"
     case workers
+    case machines
+    case machine
+    case machineUpgrade = "machine_upgrade"
     case health
     case worker
     case workerGuidance = "worker_guidance"
@@ -132,6 +135,9 @@ public enum Page: String, CaseIterable, Sendable {
         case .supervisedByYou: "/_supervised"
         case .supervisedByYouGroup: "/_supervised/:subflow/:span"
         case .workers: "/workers"
+        case .machines: "/machines"
+        case .machine: "/machines/:machine"
+        case .machineUpgrade: "/machines/:machine/upgrade"
         case .health: "/health"
         case .worker: "/workers/:machine/:worker/:turn/:attempt"
         case .workerGuidance: "/workers/:machine/:worker/:turn/:attempt/guidance"
