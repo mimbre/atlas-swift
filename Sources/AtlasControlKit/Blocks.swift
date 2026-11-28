@@ -124,14 +124,14 @@ public struct HeaderBlock: Codable, Sendable, Equatable {
 /// The props of the block `text`.
 public struct TextBlock: Codable, Sendable, Equatable {
     public var text: String?
-    public var format: String?
+    public var syntax: String?
     public var label: String?
     public var since: String?
     public var role: String?
 
-    public init(text: String? = nil, format: String? = nil, label: String? = nil, since: String? = nil, role: String? = nil) {
+    public init(text: String? = nil, syntax: String? = nil, label: String? = nil, since: String? = nil, role: String? = nil) {
         self.text = text
-        self.format = format
+        self.syntax = syntax
         self.label = label
         self.since = since
         self.role = role
@@ -140,7 +140,7 @@ public struct TextBlock: Codable, Sendable, Equatable {
     public init(from decoder: any Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         text = try? c.decodeIfPresent(String.self, forKey: .text)
-        format = try? c.decodeIfPresent(String.self, forKey: .format)
+        syntax = try? c.decodeIfPresent(String.self, forKey: .syntax)
         label = try? c.decodeIfPresent(String.self, forKey: .label)
         since = try? c.decodeIfPresent(String.self, forKey: .since)
         role = try? c.decodeIfPresent(String.self, forKey: .role)
@@ -148,7 +148,7 @@ public struct TextBlock: Codable, Sendable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case text
-        case format
+        case syntax
         case label
         case since
         case role

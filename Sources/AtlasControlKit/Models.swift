@@ -1889,13 +1889,13 @@ public struct OriginModel: Codable, Sendable, Equatable {
 public struct PairModel: Codable, Sendable, Equatable {
     public var label: String?
     public var value: String?
-    public var format: String?
+    public var syntax: String?
     public var origin: OriginModel?
 
-    public init(label: String? = nil, value: String? = nil, format: String? = nil, origin: OriginModel? = nil) {
+    public init(label: String? = nil, value: String? = nil, syntax: String? = nil, origin: OriginModel? = nil) {
         self.label = label
         self.value = value
-        self.format = format
+        self.syntax = syntax
         self.origin = origin
     }
 
@@ -1903,14 +1903,14 @@ public struct PairModel: Codable, Sendable, Equatable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         label = try? c.decodeIfPresent(String.self, forKey: .label)
         value = try? c.decodeIfPresent(String.self, forKey: .value)
-        format = try? c.decodeIfPresent(String.self, forKey: .format)
+        syntax = try? c.decodeIfPresent(String.self, forKey: .syntax)
         origin = try? c.decodeIfPresent(OriginModel.self, forKey: .origin)
     }
 
     enum CodingKeys: String, CodingKey {
         case label
         case value
-        case format
+        case syntax
         case origin
     }
 }
